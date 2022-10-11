@@ -1,34 +1,19 @@
 import processing.core.PApplet;
 
-public class Client extends PApplet {
+public class Client {
 
     public static void main(String[] args) {
-        PApplet.main("Client");
 
+        // Setting up processing
+        PApplet.main("GUI");
 
-    }
-
-    GUI gui = new GUI(this);
-
-    @Override
-    public void settings() {
-        fullScreen();
-        super.settings();
-    }
-
-    @Override
-    public void setup() {
-        super.setup();
-    }
-
-    @Override
-    public void draw() {
-        super.draw();
-
-        gui.displayupsiddownMonkey();
-
+        // GUI Object
+        // This runs the draw() function from processing so no need to call any methods from here
+        GUI gui = new GUI();
 
     }
 
-
+    public static void printToConsole(String s) {
+        System.out.println(s);
+    }
 }

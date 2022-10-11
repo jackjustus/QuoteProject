@@ -67,6 +67,6 @@ public class GUI extends PApplet {
 
     @Override
     public void settings() {
-        fullScreen(P3D);
+        fullScreen();
     }
 }

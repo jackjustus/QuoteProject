@@ -20,13 +20,15 @@ public class GUI extends PApplet {
     @Override
     public void setup() {
 
-                api = new APIManager(this);
+//                api = new APIManager(this);
+//
+//        try {
+//            api.fetchForismaticAPI();
+//        } catch (JSONException e) {
+//            exit();
+//        }
 
-        try {
-            api.fetchForismaticAPI();
-        } catch (JSONException e) {
-            exit();
-        }
+        image = loadImage("funny-cartoon-monkey-chimpanzee-hanging-upside-down-vector-illustration-2BXENAK.jpeg");
     }
 
     @Override
@@ -35,7 +37,7 @@ public class GUI extends PApplet {
         checkDebugExit();
 
         // TODO: Remove
-        displayUpsideDownMonkey();
+        //displayUpsideDownMonkey();
 
         switch (screen) {
 
@@ -43,6 +45,7 @@ public class GUI extends PApplet {
                 homeScreen();
                 break;
             case 1:
+                gameScreen();
                 break;
             case 2:
                 break;
@@ -59,13 +62,52 @@ public class GUI extends PApplet {
 
     private void homeScreen() {
 
+        //background
+        background(255,200,200);
+
+
+        //title
+        textAlign(CENTER);
+        textSize(50);
+        fill(90,0,0);
+        text("FINDING YOUR SOULMATE FROM THE PAST",width/2,height/2);
+        text("better hope its not someone who committed genocide...", width/2, (int)(height*.6));
+
+
+        fill(100);
+        rect((float) (width*.3), (float) (height*.7), (float) (width*.4), (float) (height*.17), 30);
+        fill(90,0,0);
+        text("BEGIN", width/2, (int)(height*.8));
+
+        if(mousePressed && onButton(width*.3, height*.7, width*.3 + width*.4, height*.7 + height*.17)){
+            screen=1;
+        }
+
+    }
+
+
+    private void gameScreen(){
+        background(100);
+
+
+
+    }
+
+    public boolean onButton(double x1, double y1, double x2, double y2){
+
+        if(mouseX>x1 && mouseX<x2){
+            return mouseY > y1 && mouseY < y2;
+        }
+        return false;
 
 
     }
 
 
+
+
     public void displayUpsideDownMonkey() {
-        image = loadImage("funny-cartoon-monkey-chimpanzee-hanging-upside-down-vector-illustration-2BXENAK.jpeg");
+
 
         image(this.image, 0, 0);
     }

@@ -11,6 +11,8 @@ public class Client {
         GUI gui = new GUI();
 
 
+
+
     }
 
     public static void printToConsole(String s) {

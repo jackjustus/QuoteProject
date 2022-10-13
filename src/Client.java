@@ -1,7 +1,6 @@
 import processing.core.PApplet;
 
 public class Client {
-
     public static void main(String[] args) {
 
         // Setting up processing
@@ -10,6 +9,7 @@ public class Client {
         // GUI Object
         // This runs the draw() function from processing so no need to call any methods from here
         GUI gui = new GUI();
+
 
     }
 

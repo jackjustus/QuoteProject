@@ -1,8 +1,10 @@
+import org.json.JSONException;
 import processing.core.PApplet;
 import processing.core.PImage;
 
 public class GUI extends PApplet {
 
+    APIManager api;
 
     PImage image;
     int screen;
@@ -11,11 +13,20 @@ public class GUI extends PApplet {
 
         screen = 0;
 
+
+
     }
 
     @Override
     public void setup() {
 
+                api = new APIManager(this);
+
+        try {
+            api.fetchForismaticAPI();
+        } catch (JSONException e) {
+            exit();
+        }
     }
 
     @Override

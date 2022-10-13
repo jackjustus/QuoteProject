@@ -13,20 +13,19 @@ public class GUI extends PApplet {
 
         screen = 0;
 
+    }
 
+    // TODO: REMOVE
+    public GUI(boolean noOutput) {
 
     }
 
     @Override
     public void setup() {
 
-                api = new APIManager(this);
+        api = new APIManager(this);
 
-        try {
-            api.fetchForismaticAPI();
-        } catch (JSONException e) {
-            exit();
-        }
+        api.fetchForismaticAPI();
     }
 
     @Override
@@ -60,7 +59,6 @@ public class GUI extends PApplet {
     private void homeScreen() {
 
 
-
     }
 
 
@@ -79,5 +77,9 @@ public class GUI extends PApplet {
     @Override
     public void settings() {
         fullScreen();
+    }
+
+    public PApplet getPApplet() {
+        return this;
     }
 }

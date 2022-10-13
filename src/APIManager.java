@@ -30,19 +30,15 @@ public class APIManager {
         };
     }
 
-    public String[][] getRandomAPI() {
+    public JSONArray getRandomAPI() {
 
         int rand = (int) (urls.length * Math.random() + 1);
 
-        String[][] data = new String[2][];
+        JSONArray data = new JSONArray();
 
-        /*
-        [0] - API ID
-        [1] - API DATA
-         */
-
-        data[0][0] = rand + "";
-        data[1] = urls;
+        switch (rand) {
+            case 0 -> data = fetchForismaticAPI();
+        }
 
         return data;
     }
@@ -52,10 +48,10 @@ public class APIManager {
         return new PImage();
     }
 
-    public void fetchForismaticAPI() throws JSONException {
+    public JSONArray fetchForismaticAPI() {
 
         Request request = new Request.Builder()
-                .url("http://api.forismatic.com/api/1.0/method=getQuote&format=json&lang=en")
+                .url("http://api.forismatic.com/api/1.0/method=getQuote&format=xml&lang=en")
                 .get()
 //                .addHeader("authorization", "Bearer" + " " + accessToken)
 //                .addHeader("cache-control", "no-cache")
@@ -70,13 +66,20 @@ public class APIManager {
             for (int i = 0; i < 0; i++)
                 System.out.println(myResponse.getJSONObject(i).getString("phone"));
 
-
-        } catch (IOException e) {
+            return myResponse;
+        } catch (IOException | JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            System.out.println("FORISMATIC API FETCH FAILED");
+
+            // If the API Fails, the program should stop so we can troubleshoot the issue
+            System.exit(1);
+
+            // This line will never run
+            return null;
         }
 
-//
+
     }
 
 }

@@ -13,21 +13,19 @@ public class GUI extends PApplet {
 
         screen = 0;
 
+    }
 
+    // TODO: REMOVE
+    public GUI(boolean noOutput) {
 
     }
 
     @Override
     public void setup() {
 
-//                api = new APIManager(this);
-//
-//        try {
-//            api.fetchForismaticAPI();
-//        } catch (JSONException e) {
-//            exit();
-//        }
+        api = new APIManager(this);
 
+        api.fetchForismaticAPI();
         image = loadImage("funny-cartoon-monkey-chimpanzee-hanging-upside-down-vector-illustration-2BXENAK.jpeg");
     }
 
@@ -121,5 +119,9 @@ public class GUI extends PApplet {
     @Override
     public void settings() {
         fullScreen();
+    }
+
+    public PApplet getPApplet() {
+        return this;
     }
 }

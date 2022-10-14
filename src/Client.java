@@ -12,7 +12,9 @@ public class Client {
 
         APIManager api = new APIManager(gui.getPApplet());
 
-        api.getRandomAPI();
+        System.out.println(api.fetchQuoteGardenAPI());
+
+        System.out.println(api.fetchKanyeAPI());
     }
 
     public static void printToConsole(String s) {

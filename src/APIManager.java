@@ -30,25 +30,24 @@ public class APIManager {
         };
     }
 
-    public JSONArray getRandomAPI() {
+    public String getRandomAPI() {
 
         int rand = (int) (urls.length * Math.random() + 1);
 
-        JSONArray data = new JSONArray();
+        String data = "";
 
         switch (rand) {
             case 0 -> data = fetchForismaticAPI();
+            case 1 -> data = fetchKanyeAPI();
         }
 
         return data;
     }
 
-    public PImage getRandomPhoto() {
 
-        return new PImage();
-    }
-
-    public JSONArray fetchForismaticAPI() {
+    // TODO: Remove
+    @Deprecated
+    public String fetchForismaticAPI() {
 
         Request request = new Request.Builder()
                 .url("http://api.forismatic.com/api/1.0/method=getQuote&format=xml&lang=en")
@@ -63,10 +62,9 @@ public class APIManager {
 
             JSONObject jsonObject = new JSONObject(response.body().string().trim());       // parser
             JSONArray myResponse = (JSONArray) jsonObject.get("businesses");
-            for (int i = 0; i < 0; i++)
-                System.out.println(myResponse.getJSONObject(i).getString("phone"));
+            String quote = (myResponse.getJSONObject(0).getString("phone"));
 
-            return myResponse;
+            return quote;
         } catch (IOException | JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -78,8 +76,100 @@ public class APIManager {
             // This line will never run
             return null;
         }
+    }
+
+
+    public String fetchKanyeAPI() {
+
+        // Building the request to be sent to the API
+        Request request = requestBuilder("https://api.kanye.rest/");
+
+
+        try {
+            // Attempting to communicate with the API
+            // The response is stored in response
+            Response response = fetchResponse(request);
+
+            // Parsing the response to just the quote
+            JSONObject jsonObject = parseResponse(response);
+            String quote = jsonObject.get("quote") + "";
+
+            // Returning the quote if there were no errors thrown
+            return quote;
+        } catch (IOException | JSONException e) {
+
+            // If an error was thrown, the error should print in the console and identify itself
+            e.printStackTrace();
+            System.out.println("KANYE API FETCH FAILED");
+
+            // It should then stop the program
+            System.exit(1);
+
+            // This line will never run - only needed to compile
+            return null;
+        }
+    }
+
+    public String fetchQuoteGardenAPI() {
+
+        String author = "jesus";
+
+        // Building the request to be sent to the API
+        Request request = requestBuilder("https://quote-garden.herokuapp.com/api/v3/quotes/random?author=" + author);
+
+
+        try {
+            // Attempting to communicate with the API
+            // The response is stored in response
+            Response response = fetchResponse(request);
+
+            // Parsing the response to just the quote
+            JSONObject jsonObject = parseResponse(response);
+            String quote = jsonObject.get("data");
+
+            // Returning the quote if there were no errors thrown
+            return quote;
+        } catch (IOException | JSONException e) {
+
+            // If an error was thrown, the error should print in the console and identify itself
+            e.printStackTrace();
+            System.out.println("KANYE API FETCH FAILED");
+
+            // It should then stop the program
+            System.exit(1);
+
+            // This line will never run - only needed to compile
+            return null;
+        }
 
 
     }
 
+    private Request requestBuilder(String url) {
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+        return request;
+    }
+
+    private Request requestBuilder(String url, String header1, String value) {
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader(header1, value)
+                .build();
+        return request;
+    }
+
+    private Response fetchResponse(Request request) throws IOException {
+        return client.newCall(request).execute();
+    }
+
+    private JSONObject parseResponse(Response response) throws IOException, JSONException {
+        return new JSONObject(response.body().string().trim());
+    }
+
 }
+
+

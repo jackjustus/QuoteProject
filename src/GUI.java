@@ -12,6 +12,11 @@ public class GUI extends PApplet {
     // Home-screen button
     Button beginButton;
 
+    Button choiceButton1;
+    Button choiceButton2;
+
+    boolean isChoice1;
+
     public GUI() {
 
         screen = 0;
@@ -33,6 +38,10 @@ public class GUI extends PApplet {
 
         // Home screen button init
         beginButton = new Button((float) (width * .3), (float) (height * .7), (float) (width * .4), (float) (height * .17), 30, "BEGIN", this);
+        choiceButton1 = new Button((float) (width * .1), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, api.fetchKanyeAPI(), this);
+        choiceButton2 =  new Button((float) (width * .55), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, api.fetchKanyeAPI(), this);
+        isChoice1=true;
+
     }
 
     @Override
@@ -52,6 +61,7 @@ public class GUI extends PApplet {
                 gameScreen();
                 break;
             case 2:
+                resultScreen();
                 break;
             case 3:
                 break;
@@ -82,8 +92,9 @@ public class GUI extends PApplet {
 
 
         // Going to the game screen once the user has pressed the button
-        if (beginButton.mouseOnButton() && mousePressed)
-            screen = 1;
+        if(beginButton.mouseOnButton() && mousePressed){
+            screen=1;
+        }
 
     }
 
@@ -94,12 +105,31 @@ public class GUI extends PApplet {
         fill(90, 0, 0);
         text("Choose which quote appeals to your soul...", width / 2, height / 3);
 
+
+        //do thing
         fill(150);
-        rect((float) (width * .1), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30);
+        choiceButton1.drawButton();
 
-        rect((float) (width * .55), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30);
+        choiceButton2.drawButton();
 
-//        text(api.fetchKanyeAPI(), )
+
+        if (choiceButton1.mouseOnButton() && mousePressed) {
+            screen = 2;
+            isChoice1 = true;
+        } else if (choiceButton2.mouseOnButton() && mousePressed) {
+            screen=2;
+            isChoice1=false;
+        }
+
+    }
+
+
+    private void resultScreen(){
+        background(255);
+
+
+        //opperating under the assumption that the user will choose one of hitlers quotes
+        text("HA HITLER", width/2, height/2);
 
 
     }

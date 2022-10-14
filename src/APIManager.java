@@ -124,8 +124,9 @@ public class APIManager {
             Response response = fetchResponse(request);
 
             // Parsing the response to just the quote
-            JSONObject jsonObject = parseResponse(response);
-            String quote = jsonObject.get("data")+"";
+            JSONObject parsedResponse = parseResponse(response);
+            JSONObject quoteData = (JSONObject) parsedResponse.get("data");
+            String quote = quoteData.get("quoteText") + "";
 
             // Returning the quote if there were no errors thrown
             return quote;

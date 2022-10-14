@@ -9,6 +9,9 @@ public class GUI extends PApplet {
     PImage image;
     int screen;
 
+    // Home-screen button
+    Button beginButton;
+
     public GUI() {
 
         screen = 0;
@@ -27,6 +30,9 @@ public class GUI extends PApplet {
 
 
         image = loadImage("funny-cartoon-monkey-chimpanzee-hanging-upside-down-vector-illustration-2BXENAK.jpeg");
+
+        // Home screen button init
+        beginButton = new Button((float) (width * .3), (float) (height * .7), (float) (width * .4), (float) (height * .17), 30, "BEGIN", this);
     }
 
     @Override
@@ -72,14 +78,12 @@ public class GUI extends PApplet {
         text("better hope its not someone who committed genocide...", width / 2, (int) (height * .6));
 
 
-        fill(100);
-        rect((float) (width * .3), (float) (height * .7), (float) (width * .4), (float) (height * .17), 30);
-        fill(90, 0, 0);
-        text("BEGIN", width / 2, (int) (height * .8));
+        beginButton.drawButton();
 
-        if (mousePressed && onButton(width * .3, height * .7, width * .3 + width * .4, height * .7 + height * .17)) {
+
+        // Going to the game screen once the user has pressed the button
+        if (beginButton.mouseOnButton() && mousePressed)
             screen = 1;
-        }
 
     }
 
@@ -88,26 +92,14 @@ public class GUI extends PApplet {
         background(100);
 
         fill(90, 0, 0);
-        text("Choose which quote appeals to your soul...", width / 2, height /3);
+        text("Choose which quote appeals to your soul...", width / 2, height / 3);
 
         fill(150);
         rect((float) (width * .1), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30);
 
         rect((float) (width * .55), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30);
 
-        text(api.fetchKanyeAPI(), )r
-
-
-
-
-    }
-
-    public boolean onButton(double x1, double y1, double x2, double y2) {
-
-        if (mouseX > x1 && mouseX < x2) {
-            return mouseY > y1 && mouseY < y2;
-        }
-        return false;
+//        text(api.fetchKanyeAPI(), )
 
 
     }
@@ -133,4 +125,44 @@ public class GUI extends PApplet {
     public PApplet getPApplet() {
         return this;
     }
+}
+
+
+class Button {
+
+    float x, y, width, height, cornerRadius;
+    String text;
+    PApplet p;
+
+    public Button(float x, float y, float width, float height, float cornerRadius, String text, PApplet p) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.cornerRadius = cornerRadius;
+        this.text = text;
+        this.p = p;
+    }
+
+    public boolean mouseOnButton() {
+
+
+        if (p.mouseX > x && p.mouseX < (x + width)) {
+            return p.mouseY > y && p.mouseY < (y + height);
+        }
+        return false;
+    }
+
+    public void drawButton() {
+
+        p.fill(100);
+        p.rect(x, y, width, height, cornerRadius);
+
+        // Putting the text in the center of the button
+        p.fill(90, 0, 0);
+        p.text(text, x + width / 2, y + height / 2);
+
+    }
+
+
 }

@@ -87,6 +87,18 @@ public class GUI extends PApplet {
     private void gameScreen() {
         background(100);
 
+        fill(90, 0, 0);
+        text("Choose which quote appeals to your soul...", width / 2, height /3);
+
+        fill(150);
+        rect((float) (width * .1), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30);
+
+        rect((float) (width * .55), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30);
+
+        text(api.fetchKanyeAPI(), )r
+
+
+
 
     }
 

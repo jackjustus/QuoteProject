@@ -110,7 +110,11 @@ public class APIManager {
         }
     }
 
-    public String fetchQuoteGardenAPI() {
+    public String[] fetchQuoteGardenAPI() {
+
+        // Returns a string array of the following
+        // [0] - quote
+        // [1] - quote author
 
         String author = "jesus";
 
@@ -123,13 +127,20 @@ public class APIManager {
             // The response is stored in response
             Response response = fetchResponse(request);
 
-            // Parsing the response to just the quote
+            // Parsing the response to just the quoteData
             JSONObject parsedResponse = parseResponse(response);
-            JSONObject quoteData = (JSONObject) parsedResponse.get("data");
-            String quote = quoteData.get("quoteText") + "";
+            JSONObject quoteData = (JSONObject) ((JSONArray) parsedResponse.get("data")).get(0);
 
-            // Returning the quote if there were no errors thrown
-            return quote;
+            // Getting the quote and author
+            String quote = quoteData.get("quoteText") + "";
+            String quoteAuthor = quoteData.get("quoteAuthor") + "";
+
+            // TODO: probably rename this variable
+            // Returning the quote and author if there were no errors thrown
+            String[] realQuoteData = new String[2];
+            realQuoteData[0] = quote;
+            realQuoteData[1] = quoteAuthor;
+            return realQuoteData;
         } catch (IOException | JSONException e) {
 
             // If an error was thrown, the error should print in the console and identify itself

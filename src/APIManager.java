@@ -1,6 +1,8 @@
 import okhttp3.Request;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,9 +14,7 @@ import java.io.IOException;
 public class APIManager {
 
     PApplet p;
-
-
-    OkHttpClient client = new OkHttpClient();
+    OkHttpClient client;
 
     String[] authorList = new String[]{
             "Kanye West",
@@ -24,7 +24,8 @@ public class APIManager {
     public APIManager(PApplet p) {
         this.p = p;
 
-
+        // Init API resources
+        client = new OkHttpClient();
     }
 
     public String[] getRandomQuote() {
@@ -46,41 +47,6 @@ public class APIManager {
         }
 
     }
-
-
-    // TODO: Remove
-    @Deprecated
-    public String fetchForismaticAPI() {
-
-        Request request = new Request.Builder()
-                .url("http://api.forismatic.com/api/1.0/method=getQuote&format=xml&lang=en")
-                .get()
-//                .addHeader("authorization", "Bearer" + " " + accessToken)
-//                .addHeader("cache-control", "no-cache")
-//                .addHeader("postman-token", "b5fc33ce-3dad-86d7-6e2e-d67e14e8071b")
-                .build();
-
-        try {
-            Response response = client.newCall(request).execute();
-
-            JSONObject jsonObject = new JSONObject(response.body().string().trim());       // parser
-            JSONArray myResponse = (JSONArray) jsonObject.get("businesses");
-            String quote = (myResponse.getJSONObject(0).getString("phone"));
-
-            return quote;
-        } catch (IOException | JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("FORISMATIC API FETCH FAILED");
-
-            // If the API Fails, the program should stop so we can troubleshoot the issue
-            System.exit(1);
-
-            // This line will never run
-            return null;
-        }
-    }
-
 
     public String[] fetchKanyeAPI() {
 
@@ -193,6 +159,35 @@ public class APIManager {
         return new JSONObject(response.body().string().trim());
     }
 
+    @Deprecated
+    public String fetchForismaticAPI() {
+
+        Request request = new Request.Builder()
+                .url("http://api.forismatic.com/api/1.0/method=getQuote&format=xml&lang=en")
+                .get()
+//                .addHeader("authorization", "Bearer" + " " + accessToken)
+//                .addHeader("cache-control", "no-cache")
+//                .addHeader("postman-token", "b5fc33ce-3dad-86d7-6e2e-d67e14e8071b")
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+
+            JSONObject jsonObject = new JSONObject(response.body().string().trim());       // parser
+            JSONArray myResponse = (JSONArray) jsonObject.get("businesses");
+            String quote = (myResponse.getJSONObject(0).getString("phone"));
+
+            return quote;
+        } catch (IOException | JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            System.out.println("FORISMATIC API FETCH FAILED");
+
+            // If the API Fails, the program should stop so we can troubleshoot the issue
+            System.exit(1);
+
+            // This line will never run
+            return null;
+        }
+    }
 }
-
-

@@ -6,7 +6,6 @@ public class GUI extends PApplet {
 
     APIManager api;
 
-    PImage image;
     int screen;
 
     // Home-screen button
@@ -32,9 +31,6 @@ public class GUI extends PApplet {
     public void setup() {
 
         api = new APIManager(this);
-
-
-        image = loadImage("funny-cartoon-monkey-chimpanzee-hanging-upside-down-vector-illustration-2BXENAK.jpeg");
 
         // Home screen  init
         beginButton = new Button((float) (width * .3), (float) (height * .7), (float) (width * .4), (float) (height * .17), 30, "BEGIN", this);
@@ -134,13 +130,6 @@ public class GUI extends PApplet {
         text("HA HITLER", width / 2, height / 2);
 
 
-    }
-
-
-    public void displayUpsideDownMonkey() {
-
-
-        image(this.image, 0, 0);
     }
 
     private void checkDebugExit() {

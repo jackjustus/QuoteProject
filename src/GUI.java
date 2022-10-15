@@ -36,11 +36,13 @@ public class GUI extends PApplet {
 
         image = loadImage("funny-cartoon-monkey-chimpanzee-hanging-upside-down-vector-illustration-2BXENAK.jpeg");
 
-        // Home screen button init
+        // Home screen  init
         beginButton = new Button((float) (width * .3), (float) (height * .7), (float) (width * .4), (float) (height * .17), 30, "BEGIN", this);
-        choiceButton1 = new Button((float) (width * .1), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, api.fetchKanyeAPI(), this);
-        choiceButton2 =  new Button((float) (width * .55), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, api.fetchKanyeAPI(), this);
-        isChoice1=true;
+
+        // Game screen init
+        choiceButton1 = new Button((float) (width * .1), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, "", this);
+        choiceButton2 = new Button((float) (width * .55), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, "", this);
+        isChoice1 = true;
 
     }
 
@@ -92,8 +94,8 @@ public class GUI extends PApplet {
 
 
         // Going to the game screen once the user has pressed the button
-        if(beginButton.mouseOnButton() && mousePressed){
-            screen=1;
+        if (beginButton.mouseOnButton() && mousePressed) {
+            screen = 1;
         }
 
     }
@@ -117,19 +119,19 @@ public class GUI extends PApplet {
             screen = 2;
             isChoice1 = true;
         } else if (choiceButton2.mouseOnButton() && mousePressed) {
-            screen=2;
-            isChoice1=false;
+            screen = 2;
+            isChoice1 = false;
         }
 
     }
 
 
-    private void resultScreen(){
+    private void resultScreen() {
         background(255);
 
 
         //opperating under the assumption that the user will choose one of hitlers quotes
-        text("HA HITLER", width/2, height/2);
+        text("HA HITLER", width / 2, height / 2);
 
 
     }
@@ -164,6 +166,8 @@ class Button {
     String text;
     PApplet p;
 
+
+
     public Button(float x, float y, float width, float height, float cornerRadius, String text, PApplet p) {
         this.x = x;
         this.y = y;
@@ -175,8 +179,6 @@ class Button {
     }
 
     public boolean mouseOnButton() {
-
-
         if (p.mouseX > x && p.mouseX < (x + width)) {
             return p.mouseY > y && p.mouseY < (y + height);
         }
@@ -188,9 +190,12 @@ class Button {
         p.fill(100);
         p.rect(x, y, width, height, cornerRadius);
 
+
         // Putting the text in the center of the button
         p.fill(90, 0, 0);
-        p.text(text, x + width / 2, y + height / 2);
+//        p.textAlign(p.CENTER, p.CENTER);
+        p.textAlign(p.CENTER, p.CENTER);
+        p.text(text, x, y, width, height);
 
     }
 

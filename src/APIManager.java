@@ -13,35 +13,38 @@ public class APIManager {
 
     PApplet p;
 
-    String[] urls;
 
     OkHttpClient client = new OkHttpClient();
+
+    String[] authorList = new String[]{
+            "Kanye West",
+            "Jesus Christ"
+    };
 
     public APIManager(PApplet p) {
         this.p = p;
 
 
-        urls = new String[]{
-                "http://api.forismatic.com/api/1.0/", // 0
-                "https://api.kanye.rest/", // 1
-                "https://kimiquotes.herokuapp.com[endpoint]", // 2
-                "https://quote-garden.herokuapp.com/api/v3/quotes", // 3
-                "https://api.themotivate365.com/stoic-quote" // 4
-        };
     }
 
-    public String getRandomAPI() {
+    public String[] getRandomQuote() {
 
-        int rand = (int) (urls.length * Math.random() + 1);
+        String[] data = new String[2];
 
-        String data = "";
+        // Getting a random number for the max number of authors
+        int rand = (int) (Math.random() * authorList.length + 1);
 
-        switch (rand) {
-            case 0 -> data = fetchForismaticAPI();
-            case 1 -> data = fetchKanyeAPI();
+        // Returning the quote and author for the randomly selected author
+        // See fetchQuoteGardenAPI() for reasoning behind returning the author when it is already specified
+        switch (authorList[rand]) {
+
+            // Kanye has his own API bc there are more quotes in his own API than in the Quote Garden API
+            case "KanyeWest":
+                return fetchKanyeAPI();
+            default:
+                return fetchQuoteGardenAPI(authorList[rand]);
         }
 
-        return data;
     }
 
 
@@ -79,7 +82,7 @@ public class APIManager {
     }
 
 
-    public String fetchKanyeAPI() {
+    public String[] fetchKanyeAPI() {
 
         // Building the request to be sent to the API
         Request request = requestBuilder("https://api.kanye.rest/");
@@ -94,8 +97,10 @@ public class APIManager {
             JSONObject jsonObject = parseResponse(response);
             String quote = jsonObject.get("quote") + "";
 
-            // Returning the quote if there were no errors thrown
-            return quote;
+            // Returning the quote and author if there were no errors thrown
+            return new String[]{quote, "Kanye West"};
+
+
         } catch (IOException | JSONException e) {
 
             // If an error was thrown, the error should print in the console and identify itself
@@ -110,13 +115,12 @@ public class APIManager {
         }
     }
 
-    public String[] fetchQuoteGardenAPI() {
+    public String[] fetchQuoteGardenAPI(String author) {
 
         // Returns a string array of the following
         // [0] - quote
         // [1] - quote author
 
-        String author = "jesus";
 
         // Building the request to be sent to the API
         Request request = requestBuilder("https://quote-garden.herokuapp.com/api/v3/quotes/random?author=" + author);
@@ -135,17 +139,24 @@ public class APIManager {
             String quote = quoteData.get("quoteText") + "";
             String quoteAuthor = quoteData.get("quoteAuthor") + "";
 
-            // TODO: probably rename this variable
+            /* REASONING BEHIND RETURNING THE API AUTHOR INSTEAD OF THE SPECIFIED ONE
+            There is a chance that despite asking the API for one author, they might give me a quote from another
+            If that happens, we need to return this author because there could be a discrepancy between the two authors, and this would be the correct one
+            Thanks for coming to my TED talk
+            */
+
             // Returning the quote and author if there were no errors thrown
-            String[] realQuoteData = new String[2];
-            realQuoteData[0] = quote;
-            realQuoteData[1] = quoteAuthor;
-            return realQuoteData;
+            String[] returnedData = new String[2];
+            returnedData[0] = quote;
+            returnedData[1] = quoteAuthor;
+            return returnedData;
+
+
         } catch (IOException | JSONException e) {
 
             // If an error was thrown, the error should print in the console and identify itself
             e.printStackTrace();
-            System.out.println("KANYE API FETCH FAILED");
+            System.out.println("QuoteGarden API FETCH FAILED");
 
             // It should then stop the program
             System.exit(1);

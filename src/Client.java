@@ -12,7 +12,8 @@ public class Client {
 
         APIManager api = new APIManager(gui.getPApplet());
 
-        System.out.println(api.fetchQuoteGardenAPI());
+        String[] info = api.fetchQuoteGardenAPI("obama");
+        System.out.println(info[0] + " By: " + info[1]);
 
         System.out.println(api.fetchKanyeAPI());
     }

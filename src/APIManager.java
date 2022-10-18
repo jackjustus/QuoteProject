@@ -16,7 +16,15 @@ public class APIManager {
 
     String[] authorList = new String[]{
             "Kanye West",
-            "Jesus Christ"
+            "Jesus Christ",
+            "Marilyn Monroe",
+            "Donald Trump",
+            "Elvis Presley",
+            "Mark Twain",
+            "Jackie Chan",
+            "Elton John",
+            "Abraham Lincoln",
+            "Princess Diana"
     };
 
     public APIManager(PApplet p) {

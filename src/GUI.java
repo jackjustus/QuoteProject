@@ -16,6 +16,9 @@ public class GUI extends PApplet {
 
     boolean isChoice1;
 
+    String[] quotes;
+    String[] authors;
+
     public GUI() {
 
         screen = 0;
@@ -31,6 +34,10 @@ public class GUI extends PApplet {
     public void setup() {
 
         api = new APIManager(this);
+
+        // Init quote arrays
+        quotes = new String[2];
+        authors = new String[2];
 
         // Home screen  init
         beginButton = new Button((float) (width * .3), (float) (height * .7), (float) (width * .4), (float) (height * .17), 30, "BEGIN", this);
@@ -91,6 +98,11 @@ public class GUI extends PApplet {
 
         // Going to the game screen once the user has pressed the button
         if (beginButton.mouseOnButton() && mousePressed) {
+
+            // Generating new quotes for the game screen
+            getNewQuotes();
+
+            // Switching to the game screen
             screen = 1;
         }
 
@@ -106,8 +118,10 @@ public class GUI extends PApplet {
 
         //do thing
         fill(150);
+        choiceButton1.setButtonText(quotes[0]);
         choiceButton1.drawButton();
 
+        choiceButton2.setButtonText(quotes[1]);
         choiceButton2.drawButton();
 
 
@@ -130,6 +144,14 @@ public class GUI extends PApplet {
         text("HA HITLER", width / 2, height / 2);
 
 
+    }
+
+    private void getNewQuotes() {
+        for (int i = 0; i < quotes.length; i++) {
+            String[] data = api.getRandomQuote();
+            quotes[i] = data[0];
+            authors[i] = data[1];
+        }
     }
 
     private void checkDebugExit() {
@@ -156,7 +178,6 @@ class Button {
     private PApplet p;
 
 
-
     public Button(float x, float y, float width, float height, float cornerRadius, String text, PApplet p) {
         this.x = x;
         this.y = y;
@@ -167,10 +188,6 @@ class Button {
         this.p = p;
     }
 
-
-
-
-
     public boolean mouseOnButton() {
         if (p.mouseX > x && p.mouseX < (x + width)) {
             return p.mouseY > y && p.mouseY < (y + height);
@@ -178,6 +195,9 @@ class Button {
         return false;
     }
 
+    public void setButtonText(String text) {
+        this.text = text;
+    }
 
 
     public void drawButton() {

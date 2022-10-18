@@ -39,7 +39,7 @@ public class APIManager {
         String[] data = new String[2];
 
         // Getting a random number for the max number of authors
-        int rand = (int) (Math.random() * authorList.length + 1);
+        int rand = (int) (Math.random() * authorList.length);
 
         // Returning the quote and author for the randomly selected author
         // See fetchQuoteGardenAPI() for reasoning behind returning the author when it is already specified

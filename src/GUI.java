@@ -8,6 +8,8 @@ public class GUI extends PApplet {
 
     int screen;
 
+
+
     // Home-screen button
     Button beginButton;
 
@@ -18,6 +20,8 @@ public class GUI extends PApplet {
 
     String[] quotes;
     String[] authors;
+
+    boolean yay;
 
     public GUI() {
 
@@ -46,6 +50,8 @@ public class GUI extends PApplet {
         choiceButton1 = new Button((float) (width * .1), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, "", this);
         choiceButton2 = new Button((float) (width * .55), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, "", this);
         isChoice1 = true;
+        yay=false;
+
 
     }
 
@@ -81,6 +87,8 @@ public class GUI extends PApplet {
 
     private void homeScreen() {
 
+        Button.exists=true;
+
         //background
         background(255, 200, 200);
 
@@ -97,7 +105,7 @@ public class GUI extends PApplet {
 
 
         // Going to the game screen once the user has pressed the button
-        if (beginButton.mouseOnButton() && mousePressed) {
+        if (beginButton.mouseOnButton(Button.exists) && mousePressed) {
 
             // Generating new quotes for the game screen
             getNewQuotes();
@@ -109,7 +117,8 @@ public class GUI extends PApplet {
     }
 
 
-    private void gameScreen() {
+    private void gameScreen()  {
+        Button.exists=false;
         background(100);
 
         fill(90, 0, 0);
@@ -117,6 +126,7 @@ public class GUI extends PApplet {
 
 
         //do thing
+
         fill(150);
         choiceButton1.setButtonText(quotes[0]);
         choiceButton1.drawButton();
@@ -124,17 +134,26 @@ public class GUI extends PApplet {
         choiceButton2.setButtonText(quotes[1]);
         choiceButton2.drawButton();
 
+        if(yay){
+           Button.exists=true;
+        }
 
-        if (choiceButton1.mouseOnButton() && mousePressed) {
+        if (choiceButton1.mouseOnButton(Button.exists && mousePressed)) {
+
             screen = 2;
             isChoice1 = true;
-        } else if (choiceButton2.mouseOnButton() && mousePressed) {
+        } else if (choiceButton2.mouseOnButton(Button.exists) && mousePressed) {
             screen = 2;
             isChoice1 = false;
+
         }
 
     }
 
+    public void mouseReleased(){
+        yay=true;
+
+    }
 
     private void resultScreen() {
         background(255);
@@ -177,6 +196,7 @@ class Button {
     private String text;
     private PApplet p;
 
+    public static boolean exists;
 
     public Button(float x, float y, float width, float height, float cornerRadius, String text, PApplet p) {
         this.x = x;
@@ -188,7 +208,14 @@ class Button {
         this.p = p;
     }
 
-    public boolean mouseOnButton() {
+
+
+
+
+    public boolean mouseOnButton(boolean exists) {
+        if(!exists){
+            return false;
+        }
         if (p.mouseX > x && p.mouseX < (x + width)) {
             return p.mouseY > y && p.mouseY < (y + height);
         }
@@ -201,6 +228,8 @@ class Button {
 
 
     public void drawButton() {
+
+
 
         p.fill(100);
         p.rect(x, y, width, height, cornerRadius);

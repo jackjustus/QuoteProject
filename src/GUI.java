@@ -151,11 +151,12 @@ public class GUI extends PApplet {
 
 class Button {
 
-    float x, y, width, height, cornerRadius;
-    String text;
-    PApplet p;
+    private float x, y, width, height, cornerRadius;
+    private String text;
+    private PApplet p;
 
 
+    private static boolean pressValid;
 
     public Button(float x, float y, float width, float height, float cornerRadius, String text, PApplet p) {
         this.x = x;
@@ -167,11 +168,39 @@ class Button {
         this.p = p;
     }
 
+    public static boolean isPressValid() {
+        /*
+         There was unexpected behavior when the user would click a button, the page would switch, and
+         because the user didn't have time to let go of the mouse, the button on the new page would automatically
+         be selected. This fixes that because in order for the button press to be valid, this function will validate
+         that the user has stopped pressing the mouse before the next click is registered as valid.
+        */
+
+    }
+
+    public void registerPress() {
+
+        // See isPressValid() for explanation
+        while (p.mousePressed)
+            pressValid = false;
+
+    }
+
     public boolean mouseOnButton() {
         if (p.mouseX > x && p.mouseX < (x + width)) {
             return p.mouseY > y && p.mouseY < (y + height);
         }
         return false;
+    }
+
+    public boolean mouseOnButton(boolean clickSwitchesScreen) {
+        
+        if (mouseOnButton()) {
+            registerPress();
+            return true;
+        } else
+            return false;
+
     }
 
     public void drawButton() {

@@ -19,12 +19,13 @@ public class GUI extends PApplet {
     String[] quotes;
     String[] authors;
 
+    // See the mouseReleased() function
     boolean clickActive;
     boolean loading;
 
     public GUI() {
         screen = 0;
-        clickActive = false;
+
     }
 
 
@@ -51,6 +52,8 @@ public class GUI extends PApplet {
 
         isChoice1 = true;
 
+        clickActive = false;
+
 
     }
 
@@ -59,28 +62,31 @@ public class GUI extends PApplet {
         // Leave this here
         checkDebugExit();
 
-        // TODO: Remove
-        //displayUpsideDownMonkey();
+// If we are loading something, the loading screen should go on top of the current screen
+        if (loading)
+            loadingScreen();
+        else
+            switch (screen) {
 
-        switch (screen) {
+                case 0:
+                    homeScreen();
+                    break;
+                case 1:
+                    gameScreen();
+                    break;
+                case 2:
+                    resultScreen();
+                    break;
+                case 3:
+                    break;
+                default:
+                    Client.printToConsole("Invalid Screen Number: " + screen + ", Defaulting to 0");
+                    screen = 0;
+                    break;
+            }
 
-            case 0:
-                homeScreen();
-                break;
-            case 1:
-                gameScreen();
-                break;
-            case 2:
-                resultScreen();
-                break;
-            case 3:
-                break;
-            default:
-                Client.printToConsole("Invalid Screen Number: " + screen + ", Defaulting to 0");
-                screen = 0;
-                break;
 
-        }
+        // This refers to the way we register clicks -- see where it is declared
         clickActive = false;
     }
 
@@ -100,13 +106,12 @@ public class GUI extends PApplet {
 
         beginButton.drawButton();
 
-
         // Going to the game screen once the user has pressed the button
         if (beginButton.mouseOnButton() && clickActive) {
 
 
-            // Generating new quotes for the game screen
-            getNewQuotes();
+            // Displaying the loading screen before we
+            loading = true;
 
             // Switching to the game screen
             screen = 1;
@@ -162,7 +167,6 @@ public class GUI extends PApplet {
         selectionButton.drawButton();
 
 
-
     }
 
     private void getNewQuotes() {
@@ -187,6 +191,13 @@ public class GUI extends PApplet {
     private void loadingScreen() {
         background(255);
         text("Loading", width / 2, height / 2);
+
+
+        if (loading) {
+            getNewQuotes();
+            loading = false;
+        }
+
     }
 
     public PApplet getPApplet() {
@@ -247,7 +258,7 @@ class Button {
                 p.textAlign(p.CENTER, p.CENTER);
 
                 if (scaleTextSize) {
-                    p.textWidth(text);
+//                    p.textWidth(text);
 
                 } else
                     p.textSize(textSize);

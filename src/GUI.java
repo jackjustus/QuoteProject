@@ -1,44 +1,45 @@
 import processing.core.PApplet;
+import processing.core.PFont;
 
 public class GUI extends PApplet {
 
-    APIManager api;
-
-    int screen;
-
+    private APIManager api;
 
     // Home-screen button
-    Button beginButton;
+    private Button beginButton, choiceButton1, choiceButton2, selectionButton;
 
-    Button choiceButton1;
-    Button choiceButton2;
-
-    Button selectionButton;
-    boolean isChoice1;
-
-    String[] quotes;
-    String[] authors;
-
+    // String arrays for the quotes and their authors
+    private String[] quotes, authors;
     // See the mouseReleased() function
-    boolean clickActive;
-    boolean loading;
+    private boolean clickActive, loading, isChoice1;
 
+    private PFont peachDays;
 
-    int []points;
+    private int[] points;
 
+    private int screen;
+
+    private boolean debugMode;
 
     public GUI() {
         screen = 0;
-
     }
 
+    public GUI(boolean debugMode) {
+        screen = 0;
+        this.debugMode = debugMode;
+    }
 
     @Override
     public void setup() {
 
+        // Window setup
+//        surface.setResizable(true);
+
+        // API Manager Init
         api = new APIManager(this);
 
-        points= new int[authors.length];
+        points = new int[10];
 
         // Init quote arrays
         quotes = new String[2];
@@ -60,7 +61,10 @@ public class GUI extends PApplet {
 
         clickActive = false;
 
+        // Init fonts
+        peachDays = createFont("PeachDays.ttf", 50);
 
+        System.out.println(width + ", " + height);
     }
 
     @Override
@@ -68,29 +72,32 @@ public class GUI extends PApplet {
         // Leave this here
         checkDebugExit();
 
-// If we are loading something, the loading screen should go on top of the current screen
+
+        switch (screen) {
+
+            case 0:
+                homeScreen();
+                break;
+            case 1:
+                gameScreen();
+                break;
+            case 2:
+                resultScreen();
+                break;
+            case 3:
+                break;
+            default:
+                Client.printToConsole("Invalid Screen Number: " + screen + ", Defaulting to 0");
+                screen = 0;
+                break;
+        }
+
+        // If we are loading something, the loading screen should go on top of the current screen
         if (loading)
             loadingScreen();
-        else
-            switch (screen) {
 
-                case 0:
-                    homeScreen();
-                    break;
-                case 1:
-                    gameScreen();
-                    break;
-                case 2:
-                    resultScreen();
-                    break;
-                case 3:
-                    break;
-                default:
-                    Client.printToConsole("Invalid Screen Number: " + screen + ", Defaulting to 0");
-                    screen = 0;
-                    break;
-            }
-
+        if (debugMode)
+            debugDisplay();
 
         // This refers to the way we register clicks -- see where it is declared
         clickActive = false;
@@ -99,18 +106,34 @@ public class GUI extends PApplet {
     private void homeScreen() {
 
         //background
-        background(255, 200, 200);
+        background(29, 194, 139);
 
 
-        //title
+        // Title text settings
         textAlign(CENTER);
-        textSize(50);
-        fill(90, 0, 0);
-        text("FINDING YOUR SOULMATE FROM THE PAST", width / 2, height / 2);
-        text("better hope its not someone who committed genocide...", width / 2, (int) (height * .6));
+        textFont(peachDays);
+        textSize((int) (width * .05));
+
+        int titleTextX = width / 2;
+        int titleTextY = (int) (height * .3);
+
+        fill(0);
+        text("FINDING YOUR SOULMATE FROM THE PAST", titleTextX + (int) (width * .005), titleTextY + (int) (height * .005));
+        fill(255);
+        text("FINDING YOUR SOULMATE FROM THE PAST", titleTextX, titleTextY);
+        textSize((int) (width * .035));
+        text("better hope its not someone who committed genocide...", titleTextX,(int)(titleTextY *1.3));
 
 
         beginButton.drawButton();
+
+        if (loading) {
+            getNewQuotes();
+            loading = false;
+
+            // Switching to the game screen
+            screen = 1;
+        }
 
         // Going to the game screen once the user has pressed the button
         if (beginButton.mouseOnButton() && clickActive) {
@@ -119,12 +142,10 @@ public class GUI extends PApplet {
             // Displaying the loading screen before we
             loading = true;
 
-            // Switching to the game screen
-            screen = 1;
+
         }
 
     }
-
 
     private void gameScreen() {
         background(100);
@@ -191,6 +212,7 @@ public class GUI extends PApplet {
 
     @Override
     public void settings() {
+//        size(500,500);
         fullScreen();
     }
 
@@ -198,16 +220,21 @@ public class GUI extends PApplet {
         background(255);
         text("Loading", width / 2, height / 2);
 
+        textAlign(CENTER);
+        textFont(peachDays);
+        textSize(75);
 
-        if (loading) {
-            getNewQuotes();
-            loading = false;
-        }
 
     }
 
     public PApplet getPApplet() {
         return this;
+    }
+
+    private void debugDisplay() {
+
+        textFont(createFont("ProcessingSansPro-Regular.ttf", 20));
+
     }
 }
 
@@ -232,7 +259,6 @@ class Button {
         scaleTextSize = false;
         shape = "rectangle";
     }
-
 
     public boolean mouseOnButton() {
 
@@ -272,7 +298,6 @@ class Button {
                     p.triangle((float) (width * .92), (float) (height * .2), (float) (width * .92), (float) (height * .8), (float) (width * .98), (float) (height * .5));
         }
     }
-
 
     public void setShape(String shape) {
         this.shape = shape;

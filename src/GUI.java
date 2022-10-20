@@ -27,10 +27,6 @@ public class GUI extends PApplet {
 
     }
 
-    // TODO: REMOVE
-    public GUI(boolean noOutput) {
-
-    }
 
     @Override
     public void setup() {
@@ -46,7 +42,9 @@ public class GUI extends PApplet {
 
         // Game screen init
         choiceButton1 = new Button((float) (width * .1), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, "", this);
+        choiceButton1.scaleTextSize(true);
         choiceButton2 = new Button((float) (width * .55), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, "", this);
+        choiceButton2.scaleTextSize(true);
         isChoice1 = true;
         mouseReleased = false;
 
@@ -190,7 +188,8 @@ public class GUI extends PApplet {
 
 class Button {
 
-    private float x, y, width, height, cornerRadius;
+    private float x, y, width, height, cornerRadius, textSize;
+    private boolean scaleTextSize;
     private String text;
     private PApplet p;
 
@@ -202,6 +201,8 @@ class Button {
         this.cornerRadius = cornerRadius;
         this.text = text;
         this.p = p;
+        textSize = 36;
+        scaleTextSize = false;
     }
 
 
@@ -219,6 +220,9 @@ class Button {
         this.text = text;
     }
 
+    public void scaleTextSize(boolean scaleTextSize) {
+        this.scaleTextSize = scaleTextSize;
+    }
 
     public void drawButton() {
 
@@ -229,8 +233,14 @@ class Button {
 
         // Putting the text in the center of the button
         p.fill(90, 0, 0);
-//        p.textAlign(p.CENTER, p.CENTER);
         p.textAlign(p.CENTER, p.CENTER);
+
+        if (scaleTextSize) {
+            p.textWidth(text);
+
+        }
+        else
+            p.textSize(textSize);
         p.text(text, x, y, width, height);
 
     }

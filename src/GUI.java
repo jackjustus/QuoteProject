@@ -22,6 +22,10 @@ public class GUI extends PApplet {
     boolean clickActive;
     boolean loading;
 
+
+    int []points;
+
+
     public GUI() {
         screen = 0;
         clickActive = false;
@@ -32,6 +36,8 @@ public class GUI extends PApplet {
     public void setup() {
 
         api = new APIManager(this);
+
+        points= new int[authors.length];
 
         // Init quote arrays
         quotes = new String[2];
@@ -236,8 +242,7 @@ class Button {
     public void drawButton() {
 
         switch (shape) {
-
-            case "rectangle":
+            case "rectangle" -> {
                 p.fill(100);
                 p.rect(x, y, width, height, cornerRadius);
 
@@ -245,20 +250,15 @@ class Button {
                 // Putting the text in the center of the button
                 p.fill(90, 0, 0);
                 p.textAlign(p.CENTER, p.CENTER);
-
                 if (scaleTextSize) {
                     p.textWidth(text);
 
                 } else
                     p.textSize(textSize);
                 p.text(text, x, y, width, height);
-                break;
-
-
-            case "triangle":
-
-                p.triangle((float) (width * .92), (float) (height * .2), (float) (width * .92), (float) (height * .8), (float) (width * .98), (float) (height * .5));
-                break;
+            }
+            case "triangle" ->
+                    p.triangle((float) (width * .92), (float) (height * .2), (float) (width * .92), (float) (height * .8), (float) (width * .98), (float) (height * .5));
         }
     }
 

@@ -19,13 +19,12 @@ public class GUI extends PApplet {
     String[] quotes;
     String[] authors;
 
-    boolean mouseReleased;
-    boolean buttonFunctionalityActive;
+    boolean clickActive;
+    boolean loading;
 
     public GUI() {
-
         screen = 0;
-
+        clickActive = false;
     }
 
 
@@ -51,7 +50,6 @@ public class GUI extends PApplet {
         selectionButton.scaleTextSize(true);
 
         isChoice1 = true;
-        mouseReleased = false;
 
 
     }
@@ -83,12 +81,10 @@ public class GUI extends PApplet {
                 break;
 
         }
-
+        clickActive = false;
     }
 
     private void homeScreen() {
-
-        buttonFunctionalityActive = true;
 
         //background
         background(255, 200, 200);
@@ -106,7 +102,7 @@ public class GUI extends PApplet {
 
 
         // Going to the game screen once the user has pressed the button
-        if (beginButton.mouseOnButton(buttonFunctionalityActive) && mousePressed) {
+        if (beginButton.mouseOnButton() && clickActive) {
 
 
             // Generating new quotes for the game screen
@@ -120,7 +116,6 @@ public class GUI extends PApplet {
 
 
     private void gameScreen() {
-        buttonFunctionalityActive = false;
         background(100);
 
         fill(90, 0, 0);
@@ -136,15 +131,11 @@ public class GUI extends PApplet {
         choiceButton2.setButtonText(quotes[1]);
         choiceButton2.drawButton();
 
-        if (mouseReleased) {
-            buttonFunctionalityActive = true;
-        }
 
-        if (choiceButton1.mouseOnButton(buttonFunctionalityActive && mousePressed)) {
-
+        if (choiceButton1.mouseOnButton() && clickActive) {
             screen = 2;
             isChoice1 = true;
-        } else if (choiceButton2.mouseOnButton(buttonFunctionalityActive) && mousePressed) {
+        } else if (choiceButton2.mouseOnButton() && clickActive) {
             screen = 2;
             isChoice1 = false;
 
@@ -153,7 +144,8 @@ public class GUI extends PApplet {
     }
 
     public void mouseReleased() {
-        mouseReleased = true;
+
+        clickActive = true;
     }
 
     private void resultScreen() {
@@ -192,6 +184,11 @@ public class GUI extends PApplet {
         fullScreen();
     }
 
+    private void loadingScreen() {
+        background(255);
+        text("Loading", width / 2, height / 2);
+    }
+
     public PApplet getPApplet() {
         return this;
     }
@@ -220,10 +217,8 @@ class Button {
     }
 
 
-    public boolean mouseOnButton(boolean exists) {
-        if (!exists) {
-            return false;
-        }
+    public boolean mouseOnButton() {
+
         if (p.mouseX > x && p.mouseX < (x + width)) {
             return p.mouseY > y && p.mouseY < (y + height);
         }

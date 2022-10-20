@@ -13,6 +13,7 @@ public class GUI extends PApplet {
     Button choiceButton1;
     Button choiceButton2;
 
+    Button selectionButton;
     boolean isChoice1;
 
     String[] quotes;
@@ -45,6 +46,10 @@ public class GUI extends PApplet {
         choiceButton1.scaleTextSize(true);
         choiceButton2 = new Button((float) (width * .55), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, "", this);
         choiceButton2.scaleTextSize(true);
+
+        selectionButton = new Button((float) (width * .25), (float) (height * .1), (float) (width * .5), (float) (height * .4), 30, "", this);
+        selectionButton.scaleTextSize(true);
+
         isChoice1 = true;
         mouseReleased = false;
 
@@ -155,8 +160,15 @@ public class GUI extends PApplet {
         background(255);
 
 
-        //opperating under the assumption that the user will choose one of hitlers quotes
-        text("HA HITLER", width / 2, height / 2);
+        if (isChoice1)
+            selectionButton.setButtonText(quotes[0]);
+
+        else
+            selectionButton.setButtonText(quotes[1]);
+
+
+        selectionButton.drawButton();
+
 
 
     }
@@ -192,6 +204,7 @@ class Button {
     private boolean scaleTextSize;
     private String text;
     private PApplet p;
+    private String shape;
 
     public Button(float x, float y, float width, float height, float cornerRadius, String text, PApplet p) {
         this.x = x;
@@ -203,6 +216,7 @@ class Button {
         this.p = p;
         textSize = 36;
         scaleTextSize = false;
+        shape = "rectangle";
     }
 
 
@@ -226,23 +240,36 @@ class Button {
 
     public void drawButton() {
 
+        switch (shape) {
 
-        p.fill(100);
-        p.rect(x, y, width, height, cornerRadius);
+            case "rectangle":
+                p.fill(100);
+                p.rect(x, y, width, height, cornerRadius);
 
 
-        // Putting the text in the center of the button
-        p.fill(90, 0, 0);
-        p.textAlign(p.CENTER, p.CENTER);
+                // Putting the text in the center of the button
+                p.fill(90, 0, 0);
+                p.textAlign(p.CENTER, p.CENTER);
 
-        if (scaleTextSize) {
-            p.textWidth(text);
+                if (scaleTextSize) {
+                    p.textWidth(text);
 
+                } else
+                    p.textSize(textSize);
+                p.text(text, x, y, width, height);
+                break;
+
+
+            case "triangle":
+
+                p.triangle((float) (width * .92), (float) (height * .2), (float) (width * .92), (float) (height * .8), (float) (width * .98), (float) (height * .5));
+                break;
         }
-        else
-            p.textSize(textSize);
-        p.text(text, x, y, width, height);
+    }
 
+
+    public void setShape(String shape) {
+        this.shape = shape;
     }
 
 

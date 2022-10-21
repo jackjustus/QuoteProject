@@ -1,6 +1,8 @@
 import processing.core.PApplet;
 import processing.core.PFont;
 
+import java.awt.*;
+
 public class GUI extends PApplet {
 
     private APIManager api;
@@ -27,12 +29,12 @@ public class GUI extends PApplet {
 
     public GUI(boolean debugMode) {
         screen = 0;
-        this.debugMode = debugMode;
+
     }
 
     @Override
     public void setup() {
-
+        this.debugMode = true;
         // Window setup
 //        surface.setResizable(true);
 
@@ -47,6 +49,7 @@ public class GUI extends PApplet {
 
         // Home screen  init
         beginButton = new Button((float) (width * .3), (float) (height * .7), (float) (width * .4), (float) (height * .17), 30, "BEGIN", this);
+        beginButton.setTextSize((int) (width * .04));
 
         // Game screen init
         choiceButton1 = new Button((float) (width * .1), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, "", this);
@@ -122,7 +125,7 @@ public class GUI extends PApplet {
         fill(255);
         text("FINDING YOUR SOULMATE FROM THE PAST", titleTextX, titleTextY);
         textSize((int) (width * .035));
-        text("better hope its not someone who committed genocide...", titleTextX,(int)(titleTextY *1.3));
+        text("better hope its not someone who committed genocide...", titleTextX, (int) (titleTextY * 1.3));
 
 
         beginButton.drawButton();
@@ -148,10 +151,11 @@ public class GUI extends PApplet {
     }
 
     private void gameScreen() {
-        background(100);
+        background(29, 194, 139);
 
-        fill(90, 0, 0);
-        text("Choose which quote appeals to your soul...", width / 2, height / 3);
+        fill(20);
+        textSize((int) (width * .04));
+        text("Choose which quote appeals to your soul...", width / 2, (int) (height * .2));
 
 
         //do thing
@@ -183,15 +187,24 @@ public class GUI extends PApplet {
     private void resultScreen() {
         background(255);
 
+        int choiceIndex;
 
         if (isChoice1)
-            selectionButton.setButtonText(quotes[0]);
-
+            choiceIndex = 0;
         else
-            selectionButton.setButtonText(quotes[1]);
+            choiceIndex = 1;
+
+        selectionButton.setButtonText(quotes[choiceIndex]);
+
+        float[] buttonDimensions = selectionButton.getDimensions();
+        fill(49, 214, 159);
+        rect(buttonDimensions[0],(float)(buttonDimensions[1]*2.2),buttonDimensions[2],buttonDimensions[3], 30);
 
 
         selectionButton.drawButton();
+        float endYButton = (buttonDimensions[1] + buttonDimensions[3]);
+        fill(20);
+        text("Author: " + authors[choiceIndex], width / 2, (endYButton) + (int) (height * .05));
 
 
     }
@@ -218,12 +231,13 @@ public class GUI extends PApplet {
 
     private void loadingScreen() {
         background(255);
-        text("Loading", width / 2, height / 2);
+
+        fill(0);
+        textSize(75);
+        text("Loading...", width / 2, height / 2);
 
         textAlign(CENTER);
         textFont(peachDays);
-        textSize(75);
-
 
     }
 
@@ -233,7 +247,12 @@ public class GUI extends PApplet {
 
     private void debugDisplay() {
 
-        textFont(createFont("ProcessingSansPro-Regular.ttf", 20));
+
+        fill(255);
+        rect(0, 0, 100, 100);
+        fill(0);
+        textSize(50);
+        text(screen, 50, 50);
 
     }
 }
@@ -276,11 +295,17 @@ class Button {
         this.scaleTextSize = scaleTextSize;
     }
 
+    public void setTextSize(int textSize) {
+        this.textSize = textSize;
+    }
+
     public void drawButton() {
 
         switch (shape) {
             case "rectangle" -> {
-                p.fill(100);
+                p.fill(85, 153, 217);
+                p.stroke(255);
+                p.strokeWeight((int) (width * .004));
                 p.rect(x, y, width, height, cornerRadius);
 
 
@@ -288,10 +313,16 @@ class Button {
                 p.fill(90, 0, 0);
                 p.textAlign(p.CENTER, p.CENTER);
                 if (scaleTextSize) {
-//                    p.textWidth(text);
-
+                    p.textSize(50);
                 } else
                     p.textSize(textSize);
+
+                // Inking
+                p.fill(0);
+                p.text(text, x + ((int) (width * .005)), y + ((int) (height * .005)), width, height);
+
+                // Text
+                p.fill(230);
                 p.text(text, x, y, width, height);
             }
             case "triangle" ->
@@ -301,6 +332,15 @@ class Button {
 
     public void setShape(String shape) {
         this.shape = shape;
+    }
+
+    public float[] getDimensions() {
+        return new float[]{
+                x,
+                y,
+                width,
+                height
+        };
     }
 
 

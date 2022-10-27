@@ -4,12 +4,6 @@
 //TODO fix the authors stuff something with indicies i think
 
 
-
-
-
-
-
-
 import okhttp3.Request;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
@@ -20,6 +14,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class APIManager {
 
@@ -33,7 +28,7 @@ public class APIManager {
             "Donald Trump",
             "Elvis Presley",
             "Mark Twain",
-            "Jackie Chan",
+            "Joe Biden",
             "Elton John",
             "Abraham Lincoln",
             "Princess Diana"
@@ -47,7 +42,6 @@ public class APIManager {
     }
 
     public String[] getRandomQuote() {
-
         String[] data = new String[2];
 
         // Getting a random number for the max number of authors
@@ -107,7 +101,7 @@ public class APIManager {
 
 
         // Building the request to be sent to the API
-        Request request = requestBuilder("https://quote-garden.herokuapp.com/api/v3/quotes/random?author=" + author);
+        Request request = requestBuilder("https://quote-garden.herokuapp.com/api/v3/quotes/random?limit=10&author=" + author);
 
 
         try {
@@ -130,9 +124,16 @@ public class APIManager {
             */
 
             // Returning the quote and author if there were no errors thrown
-            String[] returnedData = new String[2];
+            String[] returnedData = new String[3];
             returnedData[0] = quote;
-            returnedData[1] = quoteAuthor;
+            returnedData[1] = author;
+            returnedData[2] = getAuthorIndex(author) + "";
+
+            /* returnedData
+            [0] - The Quote
+            [1] - The Author
+            [2] - The author's index in the list of authors (String format for simplicity)
+             */
             return returnedData;
 
 
@@ -150,6 +151,18 @@ public class APIManager {
         }
 
 
+    }
+
+    public String[] getAuthorList() {
+        return authorList;
+    }
+
+    private int getAuthorIndex(String author) {
+        for (int i = 0; i < authorList.length; i++)
+            if (author.equals(authorList[i]))
+                return i;
+        System.out.println("Author not found -- See APIManager's getAuthorIndex()");
+        return -1;
     }
 
     private Request requestBuilder(String url) {

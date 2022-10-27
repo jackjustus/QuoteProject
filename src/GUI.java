@@ -125,7 +125,7 @@ public class GUI extends PApplet {
         fill(255);
         text("FINDING YOUR SOULMATE FROM THE PAST", titleTextX, titleTextY);
         textSize((int) (width * .035));
-        text("better hope its not someone who committed genocide...", titleTextX, (int) (titleTextY * 1.3));
+//        text("better hope its not someone who committed genocide...", titleTextX, (int) (titleTextY * 1.3));
 
 
         beginButton.drawButton();
@@ -185,7 +185,7 @@ public class GUI extends PApplet {
     }
 
     private void resultScreen() {
-        background(255);
+        background(210);
 
         int choiceIndex;
 

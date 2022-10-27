@@ -5,10 +5,12 @@ import java.awt.*;
 
 public class GUI extends PApplet {
 
+    private final int BUTTON_TEXT_SIZE = (int) (width * .4);
+
     private APIManager api;
 
     // Home-screen button
-    private Button beginButton, choiceButton1, choiceButton2, selectionButton;
+    private Button beginButton, choiceButton1, choiceButton2, selectionButton, returnButton;
 
     // String arrays for the quotes and their authors
     private String[] quotes, authors;
@@ -47,18 +49,58 @@ public class GUI extends PApplet {
         quotes = new String[2];
         authors = new String[2];
 
-        // Home screen  init
-        beginButton = new Button((float) (width * .3), (float) (height * .7), (float) (width * .4), (float) (height * .17), 30, "BEGIN", this);
+        // Home screen init
+        beginButton = new Button(
+                (float) (width * .3),
+                (float) (height * .7),
+                (float) (width * .4),
+                (float) (height * .17),
+                30,
+                "BEGIN",
+                this);
         beginButton.setTextSize((int) (width * .04));
 
         // Game screen init
-        choiceButton1 = new Button((float) (width * .1), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, "", this);
-        choiceButton1.scaleTextSize(true);
-        choiceButton2 = new Button((float) (width * .55), (float) (height * .4), (float) (width * .35), (float) (height * .5), 30, "", this);
-        choiceButton2.scaleTextSize(true);
+        choiceButton1 = new Button(
+                (float) (width * .1),
+                (float) (height * .4),
+                (float) (width * .35),
+                (float) (height * .5),
+                30,
+                "",
+                this);
+        choiceButton1.setTextSize(BUTTON_TEXT_SIZE);
 
-        selectionButton = new Button((float) (width * .25), (float) (height * .1), (float) (width * .5), (float) (height * .4), 30, "", this);
-        selectionButton.scaleTextSize(true);
+        choiceButton2 = new Button(
+                (float) (width * .55),
+                (float) (height * .4),
+                (float) (width * .35),
+                (float) (height * .5),
+                30,
+                "",
+                this);
+        choiceButton2.setTextSize(BUTTON_TEXT_SIZE);
+
+        // Results screen init
+        selectionButton = new Button(
+                (float) (width * .25),
+                (float) (height * .1),
+                (float) (width * .5),
+                (float) (height * .4),
+                30,
+                "",
+                this);
+        selectionButton.setTextSize(50);
+        returnButton = new Button(
+                (float) (width * .8),
+                (float) (height * .4),
+                (float) (width * .2),
+                (float) (height * .2),
+                0,
+                "",
+                this
+        );
+        returnButton.setShape("triangle");
 
         isChoice1 = true;
 
@@ -198,7 +240,11 @@ public class GUI extends PApplet {
 
         float[] buttonDimensions = selectionButton.getDimensions();
         fill(49, 214, 159);
-        rect(buttonDimensions[0],(float)(buttonDimensions[1]*2.2),buttonDimensions[2],buttonDimensions[3], 30);
+        rect(buttonDimensions[0],
+                (float) (buttonDimensions[1] * 2.2),
+                buttonDimensions[2],
+                buttonDimensions[3],
+                30);
 
 
         selectionButton.drawButton();
@@ -206,6 +252,8 @@ public class GUI extends PApplet {
         fill(20);
         text("Author: " + authors[choiceIndex], width / 2, (endYButton) + (int) (height * .05));
 
+
+        returnButton.drawButton();
 
     }
 
@@ -266,7 +314,9 @@ class Button {
     private PApplet p;
     private String shape;
 
+    // Rectangle button init
     public Button(float x, float y, float width, float height, float cornerRadius, String text, PApplet p) {
+
         this.x = x;
         this.y = y;
         this.width = width;
@@ -342,6 +392,4 @@ class Button {
                 height
         };
     }
-
-
 }

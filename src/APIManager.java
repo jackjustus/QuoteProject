@@ -21,8 +21,10 @@ public class APIManager {
     PApplet p;
     OkHttpClient client;
 
+    private int maxQuoteLength;
+
     String[] authorList = new String[]{
-            "Kanye West",
+            "Simon Cowell",
             "Jesus Christ",
             "Marilyn Monroe",
             "Donald Trump",
@@ -39,6 +41,8 @@ public class APIManager {
 
         // Init API resources
         client = new OkHttpClient();
+
+        maxQuoteLength = 100;
     }
 
     public String[] getRandomQuote() {
@@ -47,16 +51,18 @@ public class APIManager {
         // Getting a random number for the max number of authors
         int rand = (int) (Math.random() * authorList.length);
 
-        // Returning the quote and author for the randomly selected author
-        // See fetchQuoteGardenAPI() for reasoning behind returning the author when it is already specified
-        switch (authorList[rand]) {
-
-            // Kanye has his own API bc there are more quotes in his own API than in the Quote Garden API
-            case "KanyeWest":
-                return fetchKanyeAPI();
-            default:
-                return fetchQuoteGardenAPI(authorList[rand]);
-        }
+        // This loops infinitely until the quote returned is within the maxQuoteLength and the quote is returned
+        while (true)
+            switch (authorList[rand]) {
+                // Kanye has his own API bc there are more quotes in his own API than in the Quote Garden API
+                // Kanye is no longer in the list of authors however the functionality is still here bc it took a good amount of time to make his separate API
+                case "Kanye West":
+                    return fetchKanyeAPI();
+                default:
+                    String[] quote = fetchQuoteGardenAPI(authorList[rand]);
+                    if (quote[0].length() <= maxQuoteLength)
+                        return quote;
+            }
 
     }
 
@@ -188,6 +194,14 @@ public class APIManager {
 
     private JSONObject parseResponse(Response response) throws IOException, JSONException {
         return new JSONObject(response.body().string().trim());
+    }
+
+    public void setMaxQuoteLength(int maxQuoteLength) {
+        this.maxQuoteLength = maxQuoteLength;
+    }
+
+    public int getMaxQuoteLength() {
+        return maxQuoteLength;
     }
 
     @Deprecated

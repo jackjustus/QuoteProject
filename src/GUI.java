@@ -9,6 +9,7 @@ public class GUI extends PApplet {
 
     // Home-screen button
     private Button beginButton;
+    private Button randomizeAuthorsButton;
     private Button choiceButton1;
     private Button choiceButton2;
     private Button selectionButton;
@@ -173,7 +174,7 @@ public class GUI extends PApplet {
         background(29, 194, 139);
 
         // Author list
-        drawAuthorList((float) (width * .1), (float) (height * .4), 1);
+        drawAuthorList((float) (width * .05), (float) (height * .6), 1);
 
 
         // Title text settings
@@ -347,7 +348,7 @@ public class GUI extends PApplet {
                     (float) (width * .2),
                     (float) (height * .65 + (i * (float) (width * 0.05))),
                     (float) (0.4 * (5 / pointsTotal)),
-                    (float) (((float) (height * .25)) / (i + 1)));
+                    (float) (((height * .25)) / (i + 1)));
         }
 
         color(0);
@@ -357,7 +358,6 @@ public class GUI extends PApplet {
                 (float) (graphX - graphWidth * .45),
                 (float) (graphY + graphHeight * .45));
 
-
     }
 
     private void drawAuthorList(float x, float y, float scale) {
@@ -365,32 +365,50 @@ public class GUI extends PApplet {
         float listWidth = (float) (width * .2 * scale);
         float listHeight = (float) (width * .2 * scale);
 
+
+        // init randomizeButton
+        if (randomizeAuthorsButton == null) {
+            randomizeAuthorsButton = new Button(
+                    x + listWidth / 2,
+                    (y + listHeight) - listHeight / 6,
+                    listWidth / 2,
+                    listHeight / 8,
+                    ((float) (width * .01)),
+                    "Randomize",
+                    this
+            );
+            randomizeAuthorsButton.setRectMode(CENTER);
+            randomizeAuthorsButton.setTextSize(100);
+        }
+
+
         fill(200);
         rectMode(CORNER);
         rect(x, y, listWidth, listHeight, (float) (width * .02));
 
         fill(0);
-        textMode(CENTER);
         textSize((int) (width * .03));
         text("AUTHORS", x + listWidth / 2, y + listHeight / 8);
 
         // Listing the actual number of authors
         // The distance between the authors gets smaller based on the number of authors
         // This is optimized for 4 authors -- may bug out if more are added but figure I might try
-        float listYIncrement = listHeight / (api.getNUM_AUTHORS_IN_GAME() + 2);
+        float listYIncrement = listHeight / (api.getNUM_AUTHORS_IN_GAME() + 4);
 
         textSize((int) (width * .015));
         for (int i = 0; i < api.getNUM_AUTHORS_IN_GAME(); i++) {
-            text(api.getAuthorList()[i],
+            text(
+                    api.getAuthorList()[i],
                     x + listWidth / 2,
-                    (y + listHeight / 8) + (listYIncrement * (i + 1)));
-
-
+                    (float) ((y + listHeight / 3.5) + (listYIncrement * (i)))
+            );
         }
 
+        randomizeAuthorsButton.drawButton();
 
-        // Drawing the authors
-
+        // Randomize button functionality
+        if (randomizeAuthorsButton.mouseOnButton() && clickActive)
+            api.generateAuthorList();
     }
 
     private void debugDisplay() {
@@ -416,6 +434,7 @@ class Button {
     private String text;
     private PApplet p;
     private String shape;
+    private int rectMode;
 
     // Rectangle button init
     public Button(float x, float y, float width, float height, float cornerRadius, String text, PApplet p) {
@@ -430,6 +449,7 @@ class Button {
         textSize = 36;
         scaleTextSize = false;
         shape = "rectangle";
+        rectMode = p.CORNER;
     }
 
     public boolean mouseOnButton() {
@@ -456,7 +476,7 @@ class Button {
 
         switch (shape) {
             case "rectangle" -> {
-                p.rectMode(p.CORNER);
+                p.rectMode(rectMode);
                 p.fill(85, 153, 217);
                 p.stroke(255);
                 p.strokeWeight((int) (width * .004));
@@ -495,5 +515,9 @@ class Button {
                 width,
                 height
         };
+    }
+
+    public void setRectMode(int rectMode) {
+        this.rectMode = rectMode;
     }
 }

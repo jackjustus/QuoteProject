@@ -1,6 +1,7 @@
 import processing.core.PApplet;
 
 public class Client {
+
     public static void main(String[] args) {
 
         // Setting up processing
@@ -11,6 +12,13 @@ public class Client {
         GUI gui = new GUI(true);
 
         APIManager api = new APIManager(gui.getPApplet());
+
+        // The game gets quotes from a specified number of authors
+        // This generates those authors from a pool of authors specified in the APIManager class
+        api.generateAuthorList();
+
+        for (int i = 0; i < api.authorList.length; i++)
+            System.out.println(api.authorList[i]);
     }
 
     public static void printToConsole(String s) {

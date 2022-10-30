@@ -10,7 +10,11 @@ public class GUI extends PApplet {
     private APIManager api;
 
     // Home-screen button
-    private Button beginButton, choiceButton1, choiceButton2, selectionButton, returnButton, graphButton, backButton;
+    private Button beginButton;
+    private Button choiceButton1;
+    private Button choiceButton2;
+    private Button selectionButton;
+    private Button returnButton;
 
     // String arrays for the quotes and their authors
     private String[] quotes, authors;
@@ -31,25 +35,26 @@ public class GUI extends PApplet {
 
     public GUI() {
         screen = 0;
+        this.debugMode = false;
     }
 
     public GUI(boolean debugMode) {
         screen = 0;
-
+        this.debugMode = debugMode;
     }
 
     @Override
     public void setup() {
-        this.debugMode = true;
         // Window setup
 //        surface.setResizable(true);
 
         // API Manager Init
         api = new APIManager(this);
+        api.generateAuthorList();
 
         points = new int[10];
-        pointsTotal=0;
-        bars=0;
+        pointsTotal = 0;
+        bars = 0;
 
         // Init quote arrays
         quotes = new String[2];
@@ -87,25 +92,6 @@ public class GUI extends PApplet {
                 this);
         choiceButton2.setTextSize(BUTTON_TEXT_SIZE);
 
-        backButton = new Button(
-                (float) (width*.02),
-                (float) (height*.91),
-                (float) (width*.1),
-                (float) (height*.07),
-                30,
-                "BACK",
-                this);
-        backButton.setTextSize(BUTTON_TEXT_SIZE);
-
-        graphButton = new Button(
-                (float) (width*.2),
-                (float) (height*.63),
-                (float) (width*.6),
-                (float) (height*.35),
-                30,
-                "",
-                this);
-
 
         // Results screen init
         selectionButton = new Button(
@@ -117,6 +103,7 @@ public class GUI extends PApplet {
                 "",
                 this);
         selectionButton.setTextSize(50);
+
         returnButton = new Button(
                 (float) (width * .8),
                 (float) (height * .4),
@@ -178,6 +165,9 @@ public class GUI extends PApplet {
 
         //background
         background(29, 194, 139);
+
+        // Author list
+        drawAuthorList((float) (width * .1), (float) (height * .4), 1);
 
 
         // Title text settings
@@ -243,11 +233,6 @@ public class GUI extends PApplet {
 
         }
 
-        backButton.drawButton();
-        if (backButton.mouseOnButton() && clickActive)
-            screen--;
-
-
 
     }
 
@@ -276,12 +261,13 @@ public class GUI extends PApplet {
         */
 
 
-
         selectionButton.setButtonText(quotes[choiceIndex]);
 
         float[] buttonDimensions = selectionButton.getDimensions();
         fill(49, 214, 159);
-        rect(buttonDimensions[0],
+        rectMode(CORNER);
+        rect(
+                buttonDimensions[0],
                 (float) (buttonDimensions[1] * 2.2),
                 buttonDimensions[2],
                 buttonDimensions[3],
@@ -300,45 +286,15 @@ public class GUI extends PApplet {
             getNewQuotes();
         }
 
-        graphButton.drawButton();
+
+        // Drawing the graph at the x and y coordinate provided
+        drawGraph(width / 2, (float) (height * .8), width / 2, (float) (height * .3));
 
 
-        color(0);
-        line(
-                (float) (width*.28),
-                (float) (height*.67),
-                (float) (width*.28),
-                (float) (height*.94));
-
-        for(int i=0;i<points.length;i++){
-            pointsTotal+=points[i];
-        }
+        for (int point : points)
+            pointsTotal += point;
 
 
-
-        //THIS DOES NOT WORK FOR NOW BUT EDO NOT TOUCH IT WILL EXPLODE
-        for(int i=0;i<bars;i++){
-            rect(
-                    (float) (width*.2),
-                    (float) (height*.65 + (i* (float)(width*0.05))),
-                    (float) (  0.4*(5/pointsTotal)    ),
-                    (float) (  ((float)(height*.25))  / (i+1)     ));
-        }
-
-
-
-
-        /*
-                (float) (width*.2),
-                (float) (height*.63),
-                (float) (width*.6),
-                (float) (height*.35),
-         */
-
-
-        backButton.drawButton();
-        if (backButton.mouseOnButton() && clickActive) {
-            screen--;
             /*
             points[APIManager.getAuthorIndex(authors[choiceIndex])]--;
             if(points[APIManager.getAuthorIndex(authors[choiceIndex])]==0){
@@ -346,10 +302,8 @@ public class GUI extends PApplet {
             }
 
             */
-        }
-
-
     }
+
 
     private void getNewQuotes() {
         for (int i = 0; i < quotes.length; i++) {
@@ -383,12 +337,65 @@ public class GUI extends PApplet {
 
     }
 
-    public PApplet getPApplet() {
-        return this;
+    private void drawGraph(float graphX, float graphY, float graphWidth, float graphHeight) {
+
+        // Drawing the graph's box
+        rectMode(CENTER);
+        rect(graphX, graphY, graphWidth, graphHeight, (float) (width * .02));
+
+        //THIS DOES NOT WORK FOR NOW BUT EDO NOT TOUCH IT WILL EXPLODE
+        for (int i = 0; i < bars; i++) {
+            rect(
+                    (float) (width * .2),
+                    (float) (height * .65 + (i * (float) (width * 0.05))),
+                    (float) (0.4 * (5 / pointsTotal)),
+                    (float) (((float) (height * .25)) / (i + 1)));
+        }
+
+        color(0);
+        line(
+                (float) (graphX - graphWidth * .45),
+                (float) (graphY - graphHeight * .45),
+                (float) (graphX - graphWidth * .45),
+                (float) (graphY + graphHeight * .45));
+
+
+    }
+
+    private void drawAuthorList(float x, float y, float scale) {
+
+        float listWidth = (float) (width * .2 * scale);
+        float listHeight = (float) (width * .2 * scale);
+
+        fill(200);
+        rectMode(CORNER);
+        rect(x, y, listWidth, listHeight, (float) (width * .02));
+
+        fill(0);
+        textMode(CENTER);
+        textSize((int) (width * .03));
+        text("AUTHORS", x + listWidth / 2, y + listHeight / 8);
+
+        // Listing the actual number of authors
+        // The distance between the authors gets smaller based on the number of authors
+        // This is optimized for 4 authors -- may bug out if more are added but figure I might try
+        float listYIncrement = listHeight / (api.getNUM_AUTHORS_IN_GAME() + 2);
+
+        textSize((int) (width * .015));
+        for (int i = 0; i < api.getNUM_AUTHORS_IN_GAME(); i++) {
+            text(api.getAuthorList()[i],
+                    x + listWidth / 2,
+                    (y + listHeight / 8) + (listYIncrement * (i + 1)));
+
+
+        }
+
+
+        // Drawing the authors
+
     }
 
     private void debugDisplay() {
-
 
         fill(255);
         rect(0, 0, 100, 100);
@@ -396,6 +403,10 @@ public class GUI extends PApplet {
         textSize(50);
         text(screen, 50, 50);
 
+    }
+
+    public PApplet getPApplet() {
+        return this;
     }
 }
 
@@ -447,6 +458,7 @@ class Button {
 
         switch (shape) {
             case "rectangle" -> {
+                p.rectMode(p.CORNER);
                 p.fill(85, 153, 217);
                 p.stroke(255);
                 p.strokeWeight((int) (width * .004));

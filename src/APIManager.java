@@ -23,7 +23,9 @@ public class APIManager {
 
     private int maxQuoteLength;
 
-    String[] authorList = new String[]{
+    private int NUM_AUTHORS_IN_GAME = 4;
+
+    public String[] authorList = new String[]{
             "Simon Cowell",
             "Jesus Christ",
             "Marilyn Monroe",
@@ -54,10 +56,14 @@ public class APIManager {
         // This loops infinitely until the quote returned is within the maxQuoteLength and the quote is returned
         while (true)
             switch (authorList[rand]) {
+
+
                 // Kanye has his own API bc there are more quotes in his own API than in the Quote Garden API
                 // Kanye is no longer in the list of authors however the functionality is still here bc it took a good amount of time to make his separate API
                 case "Kanye West":
                     return fetchKanyeAPI();
+
+
                 default:
                     String[] quote = fetchQuoteGardenAPI(authorList[rand]);
                     if (quote[0].length() <= maxQuoteLength)
@@ -159,6 +165,41 @@ public class APIManager {
 
     }
 
+    public void generateAuthorList() {
+
+        // authorPool holds all of the potential authors - authorList holds the authors that will be in the game
+        String[] authorPool = authorList;
+        for (String s : authorPool)
+            System.out.println(s);
+        authorList = new String[NUM_AUTHORS_IN_GAME];
+        Arrays.fill(authorList, "");
+
+
+        for (int i = 0; i < NUM_AUTHORS_IN_GAME; i++) {
+
+            int randomAuthorIndex = (int) (Math.random() * authorPool.length);
+
+            boolean indexValid = true;
+
+            // Making sure the author isn't a duplicate (and there are other authors in the list)
+            if (!authorList[0].equals(""))
+                for (String authorsInList : authorList)
+                    if (authorsInList.equals(authorPool[randomAuthorIndex]))
+                        indexValid = false;
+
+            System.out.println(indexValid);
+
+            // If there are no matching authors already in the author list then the author is added to the pool
+            // If there are, the for loop will run again
+            if (indexValid)
+                authorList[i] = authorPool[randomAuthorIndex];
+            else
+                i--;
+        }
+
+
+    }
+
     public String[] getAuthorList() {
         return authorList;
     }
@@ -202,6 +243,10 @@ public class APIManager {
 
     public int getMaxQuoteLength() {
         return maxQuoteLength;
+    }
+
+    public int getNUM_AUTHORS_IN_GAME(){
+        return NUM_AUTHORS_IN_GAME;
     }
 
     @Deprecated

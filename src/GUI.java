@@ -50,7 +50,7 @@ public class GUI extends PApplet {
         api = new APIManager(this);
         api.generateAuthorList();
 
-        points = new int[10];
+        points = new int[api.getNUM_AUTHORS_IN_GAME()];
         pointsTotal = 0;
         bars = 0;
 
@@ -192,13 +192,6 @@ public class GUI extends PApplet {
 
         beginButton.drawButton();
 
-//        if (loadNewQuotes) {
-//            getNewQuotes();
-//            loadNewQuotes = false;
-//
-//             Switching to the game screen
-//            screen = 1;
-//        }
 
         // Going to the game screen once the user has pressed the button
         if (beginButton.mouseOnButton() && clickActive) {
@@ -259,12 +252,11 @@ public class GUI extends PApplet {
 
 
         //this doesnt work and i dont know why pls fix
-        /*
-        if(points[APIManager.getAuthorIndex(authors[choiceIndex])]==0){
-            bars++;
-        }
-        points[APIManager.getAuthorIndex(authors[choiceIndex])]++;
-        */
+        // TODO: FIND OUT WHAT KADEN WAS TRYING TO DO AND WHY HE WANTS TO DO IT AND THEN DO IT
+//        if(points[APIManager.getAuthorIndex(authors[choiceIndex])]==0){
+//            bars++;
+//        }
+//        points[APIManager.getAuthorIndex(authors[choiceIndex])]++;
 
 
         selectionButton.setButtonText(quotes[choiceIndex]);

@@ -1,8 +1,6 @@
 import processing.core.PApplet;
 import processing.core.PFont;
 
-import java.awt.*;
-
 public class GUI extends PApplet {
 
     private final int BUTTON_TEXT_SIZE = (int) (width * .4);
@@ -19,7 +17,7 @@ public class GUI extends PApplet {
     // String arrays for the quotes and their authors
     private String[] quotes, authors;
     // See the mouseReleased() function
-    private boolean clickActive, loading, isChoice1;
+    private boolean clickActive, loadNewQuotes, isChoice1;
 
     private PFont peachDays;
 
@@ -127,8 +125,14 @@ public class GUI extends PApplet {
 
     @Override
     public void draw() {
+
         // Leave this here
         checkDebugExit();
+
+        if (loadNewQuotes) {
+            getNewQuotes();
+            loadNewQuotes = false;
+        }
 
 
         switch (screen) {
@@ -150,8 +154,10 @@ public class GUI extends PApplet {
                 break;
         }
 
-        // If we are loading something, the loading screen should go on top of the current screen
-        if (loading)
+        // This will be set true by one of the the screen methods
+        // The loading screen will be displayed
+        // At the top of draw(), we will actually load the quotes, after the loading screen is displayed
+        if (loadNewQuotes)
             loadingScreen();
 
         if (debugMode)
@@ -186,22 +192,22 @@ public class GUI extends PApplet {
 
         beginButton.drawButton();
 
-        if (loading) {
-            getNewQuotes();
-            loading = false;
-
-            // Switching to the game screen
-            screen = 1;
-        }
+//        if (loadNewQuotes) {
+//            getNewQuotes();
+//            loadNewQuotes = false;
+//
+//             Switching to the game screen
+//            screen = 1;
+//        }
 
         // Going to the game screen once the user has pressed the button
         if (beginButton.mouseOnButton() && clickActive) {
 
+            // This will display the loading screen then load the quotes
+            loadNewQuotes = true;
 
-            // Displaying the loading screen before we
-            loading = true;
-
-
+            // Going to the game screen after the quotes have been loaded
+            screen = 1;
         }
 
     }
@@ -283,7 +289,7 @@ public class GUI extends PApplet {
         returnButton.drawButton();
         if (returnButton.mouseOnButton() && clickActive) {
             screen = 1;
-            getNewQuotes();
+            loadNewQuotes = true;
         }
 
 

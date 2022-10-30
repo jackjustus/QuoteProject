@@ -10,7 +10,7 @@ public class GUI extends PApplet {
     private APIManager api;
 
     // Home-screen button
-    private Button beginButton, choiceButton1, choiceButton2, selectionButton, returnButton;
+    private Button beginButton, choiceButton1, choiceButton2, selectionButton, returnButton, graphButton, backButton;
 
     // String arrays for the quotes and their authors
     private String[] quotes, authors;
@@ -20,6 +20,10 @@ public class GUI extends PApplet {
     private PFont peachDays;
 
     private int[] points;
+    private int pointsTotal;
+
+    //number of bars on the results graph
+    private int bars;
 
     private int screen;
 
@@ -44,6 +48,8 @@ public class GUI extends PApplet {
         api = new APIManager(this);
 
         points = new int[10];
+        pointsTotal=0;
+        bars=0;
 
         // Init quote arrays
         quotes = new String[2];
@@ -80,6 +86,26 @@ public class GUI extends PApplet {
                 "",
                 this);
         choiceButton2.setTextSize(BUTTON_TEXT_SIZE);
+
+        backButton = new Button(
+                (float) (width*.02),
+                (float) (height*.91),
+                (float) (width*.1),
+                (float) (height*.07),
+                30,
+                "BACK",
+                this);
+        backButton.setTextSize(BUTTON_TEXT_SIZE);
+
+        graphButton = new Button(
+                (float) (width*.2),
+                (float) (height*.63),
+                (float) (width*.6),
+                (float) (height*.35),
+                30,
+                "",
+                this);
+
 
         // Results screen init
         selectionButton = new Button(
@@ -167,8 +193,6 @@ public class GUI extends PApplet {
         fill(255);
         text("FINDING YOUR SOULMATE FROM THE PAST", titleTextX, titleTextY);
         textSize((int) (width * .035));
-//        text("better hope its not someone who committed genocide...", titleTextX, (int) (titleTextY * 1.3));
-
 
         beginButton.drawButton();
 
@@ -219,6 +243,12 @@ public class GUI extends PApplet {
 
         }
 
+        backButton.drawButton();
+        if (backButton.mouseOnButton() && clickActive)
+            screen--;
+
+
+
     }
 
     public void mouseReleased() {
@@ -235,6 +265,17 @@ public class GUI extends PApplet {
             choiceIndex = 0;
         else
             choiceIndex = 1;
+
+
+        //this doesnt work and i dont know why pls fix
+        /*
+        if(points[APIManager.getAuthorIndex(authors[choiceIndex])]==0){
+            bars++;
+        }
+        points[APIManager.getAuthorIndex(authors[choiceIndex])]++;
+        */
+
+
 
         selectionButton.setButtonText(quotes[choiceIndex]);
 
@@ -254,6 +295,59 @@ public class GUI extends PApplet {
 
 
         returnButton.drawButton();
+        if (returnButton.mouseOnButton() && clickActive) {
+            screen = 1;
+            getNewQuotes();
+        }
+
+        graphButton.drawButton();
+
+
+        color(0);
+        line(
+                (float) (width*.28),
+                (float) (height*.67),
+                (float) (width*.28),
+                (float) (height*.94));
+
+        for(int i=0;i<points.length;i++){
+            pointsTotal+=points[i];
+        }
+
+
+
+        //THIS DOES NOT WORK FOR NOW BUT EDO NOT TOUCH IT WILL EXPLODE
+        for(int i=0;i<bars;i++){
+            rect(
+                    (float) (width*.2),
+                    (float) (height*.65 + (i* (float)(width*0.05))),
+                    (float) (  0.4*(5/pointsTotal)    ),
+                    (float) (  ((float)(height*.25))  / (i+1)     ));
+        }
+
+
+
+
+        /*
+                (float) (width*.2),
+                (float) (height*.63),
+                (float) (width*.6),
+                (float) (height*.35),
+         */
+
+
+        backButton.drawButton();
+        if (backButton.mouseOnButton() && clickActive) {
+            screen--;
+            /*
+            points[APIManager.getAuthorIndex(authors[choiceIndex])]--;
+            if(points[APIManager.getAuthorIndex(authors[choiceIndex])]==0){
+                bars--;
+            }
+
+            */
+        }
+
 
     }
 
@@ -376,7 +470,7 @@ class Button {
                 p.text(text, x, y, width, height);
             }
             case "triangle" ->
-                    p.triangle((float) (width * .92), (float) (height * .2), (float) (width * .92), (float) (height * .8), (float) (width * .98), (float) (height * .5));
+                    p.triangle((float) (width * 4.5), (float) (height), (float) (width * 4.5), (float) (height * 4), (float) (width * 4.8), (float) (height * 2.5));
         }
     }
 

@@ -25,7 +25,7 @@ public class APIManager {
 
     private int NUM_AUTHORS_IN_GAME = 4;
 
-    public String[] authorList = new String[]{
+    public String[] authorPool = new String[]{
             "Simon Cowell",
             "Jesus Christ",
             "Marilyn Monroe",
@@ -37,6 +37,8 @@ public class APIManager {
             "Abraham Lincoln",
             "Princess Diana"
     };
+
+    public String[] authorList;
 
     public APIManager(PApplet p) {
         this.p = p;
@@ -168,9 +170,6 @@ public class APIManager {
     public void generateAuthorList() {
 
         // authorPool holds all of the potential authors - authorList holds the authors that will be in the game
-        String[] authorPool = authorList;
-        for (String s : authorPool)
-            System.out.println(s);
         authorList = new String[NUM_AUTHORS_IN_GAME];
         Arrays.fill(authorList, "");
 
@@ -186,8 +185,6 @@ public class APIManager {
                 for (String authorsInList : authorList)
                     if (authorsInList.equals(authorPool[randomAuthorIndex]))
                         indexValid = false;
-
-            System.out.println(indexValid);
 
             // If there are no matching authors already in the author list then the author is added to the pool
             // If there are, the for loop will run again

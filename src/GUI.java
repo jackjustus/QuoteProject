@@ -150,7 +150,7 @@ public class GUI extends PApplet {
             case 3:
                 break;
             default:
-                Client.printToConsole("Invalid Screen Number: " + screen + ", Defaulting to 0");
+                System.out.println("Invalid Screen Number: " + screen + ", Defaulting to 0");
                 screen = 0;
                 break;
         }
@@ -237,7 +237,6 @@ public class GUI extends PApplet {
     }
 
     public void mouseReleased() {
-
         clickActive = true;
     }
 
@@ -378,7 +377,7 @@ public class GUI extends PApplet {
                     this
             );
             randomizeAuthorsButton.setRectMode(CENTER);
-            randomizeAuthorsButton.setTextSize(100);
+            randomizeAuthorsButton.setTextSize((int)(width*.015));
         }
 
 
@@ -406,9 +405,11 @@ public class GUI extends PApplet {
 
         randomizeAuthorsButton.drawButton();
 
+
         // Randomize button functionality
         if (randomizeAuthorsButton.mouseOnButton() && clickActive)
             api.generateAuthorList();
+
     }
 
     private void debugDisplay() {
@@ -429,12 +430,12 @@ public class GUI extends PApplet {
 
 class Button {
 
-    private float x, y, width, height, cornerRadius, textSize;
+    private float x, y, width, height, cornerRadius;
     private boolean scaleTextSize;
     private String text;
     private PApplet p;
     private String shape;
-    private int rectMode;
+    private int rectMode, textSize;
 
     // Rectangle button init
     public Button(float x, float y, float width, float height, float cornerRadius, String text, PApplet p) {
@@ -450,14 +451,34 @@ class Button {
         scaleTextSize = false;
         shape = "rectangle";
         rectMode = p.CORNER;
+
     }
 
     public boolean mouseOnButton() {
 
-        if (p.mouseX > x && p.mouseX < (x + width)) {
-            return p.mouseY > y && p.mouseY < (y + height);
+        switch (rectMode) {
+            case 0 /*CORNER*/ -> {
+                if (p.mouseX > x && p.mouseX < (x + width))
+                    return p.mouseY > y && p.mouseY < (y + height);
+                return false;
+            }
+            case 3 /*CENTER*/ -> {
+
+                float x1 = x - width / 2;
+                float y1 = y - height / 2;
+                float x2 = x + width / 2;
+                float y2 = y + height / 2;
+
+                if (p.mouseX > x1 && p.mouseX < x2)
+                    return p.mouseY > y1 && p.mouseY < y2;
+                return false;
+            }
+            default -> {
+                System.out.println("RECT MODE INVALID IN Button.mouseOnButton()");
+                p.exit();
+                return false;
+            }
         }
-        return false;
     }
 
     public void setButtonText(String text) {
@@ -476,6 +497,8 @@ class Button {
 
         switch (shape) {
             case "rectangle" -> {
+
+
                 p.rectMode(rectMode);
                 p.fill(85, 153, 217);
                 p.stroke(255);
@@ -491,13 +514,19 @@ class Button {
                 } else
                     p.textSize(textSize);
 
+
+                float textX = x;
+                float textY = y;
+                float textWidth = width;
+                float textHeight = height;
+
                 // Inking
                 p.fill(0);
-                p.text(text, x + ((int) (width * .005)), y + ((int) (height * .005)), width, height);
+                p.text(text, textX + ((int) (width * .005)), textY + ((int) (height * .005)), textWidth, textHeight);
 
                 // Text
                 p.fill(230);
-                p.text(text, x, y, width, height);
+                p.text(text, textX, textY, textWidth, textHeight);
             }
             case "triangle" ->
                     p.triangle((float) (width * 4.5), (float) (height), (float) (width * 4.5), (float) (height * 4), (float) (width * 4.8), (float) (height * 2.5));

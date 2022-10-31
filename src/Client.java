@@ -17,8 +17,6 @@ public class Client {
         // This generates those authors from a pool of authors specified in the APIManager class
         api.generateAuthorList();
 
-        for (int i = 0; i < api.authorList.length; i++)
-            System.out.println(api.authorList[i]);
     }
 
     public static void printToConsole(String s) {

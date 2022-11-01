@@ -254,7 +254,7 @@ public class GUI extends PApplet {
 
         // If the author's point count is zero, we add a bar
         if (points[api.getAuthorIndex(authors[choiceIndex])] == 0) {
-            bars++;
+            bars++;//l
         }
         points[api.getAuthorIndex(authors[choiceIndex])]++;
 

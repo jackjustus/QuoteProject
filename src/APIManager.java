@@ -11,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import processing.core.PApplet;
-import processing.core.PImage;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -27,7 +26,6 @@ public class APIManager {
 
     public String[] authorPool = new String[]{
             "Simon Cowell",
-            "Jesus Christ",
             "Marilyn Monroe",
             "Donald Trump",
             "Elvis Presley",
@@ -35,7 +33,10 @@ public class APIManager {
             "Joe Biden",
             "Elton John",
             "Abraham Lincoln",
-            "Princess Diana"
+            "Princess Diana",
+            "Leonardo da Vinci",
+            "Winston Churchill",
+            "Charles Darwin"
     };
 
     public String[] authorList;
@@ -64,7 +65,6 @@ public class APIManager {
                 // Kanye is no longer in the list of authors however the functionality is still here bc it took a good amount of time to make his separate API
                 case "Kanye West":
                     return fetchKanyeAPI();
-
 
                 default:
                     String[] quote = fetchQuoteGardenAPI(authorList[rand]);
@@ -183,8 +183,10 @@ public class APIManager {
             // Making sure the author isn't a duplicate (and there are other authors in the list)
             if (!authorList[0].equals(""))
                 for (String authorsInList : authorList)
-                    if (authorsInList.equals(authorPool[randomAuthorIndex]))
+                    if (authorsInList.equals(authorPool[randomAuthorIndex])) {
                         indexValid = false;
+                        break;
+                    }
 
             // If there are no matching authors already in the author list then the author is added to the pool
             // If there are, the for loop will run again
@@ -193,7 +195,6 @@ public class APIManager {
             else
                 i--;
         }
-
 
     }
 
@@ -217,29 +218,12 @@ public class APIManager {
         return request;
     }
 
-    private Request requestBuilder(String url, String header1, String value) {
-        Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .addHeader(header1, value)
-                .build();
-        return request;
-    }
-
     private Response fetchResponse(Request request) throws IOException {
         return client.newCall(request).execute();
     }
 
     private JSONObject parseResponse(Response response) throws IOException, JSONException {
         return new JSONObject(response.body().string().trim());
-    }
-
-    public void setMaxQuoteLength(int maxQuoteLength) {
-        this.maxQuoteLength = maxQuoteLength;
-    }
-
-    public int getMaxQuoteLength() {
-        return maxQuoteLength;
     }
 
     public int getNUM_AUTHORS_IN_GAME(){

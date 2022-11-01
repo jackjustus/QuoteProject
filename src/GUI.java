@@ -23,24 +23,15 @@ public class GUI extends PApplet {
     private PFont peachDays;
 
     // Points is an int[] array. It counts the points for the authors. points[0] is the point count for api.getAuthorIndex(author)
-    private int[] points;
-    private int pointsTotal;
+    private int[] authorPoints;
 
     //number of bars on the results graph
     private int bars;
 
     private int screen;
 
-    private boolean debugMode;
-
     public GUI() {
         screen = 0;
-        this.debugMode = false;
-    }
-
-    public GUI(boolean debugMode) {
-        screen = 0;
-        this.debugMode = debugMode;
     }
 
     @Override
@@ -52,8 +43,7 @@ public class GUI extends PApplet {
         api = new APIManager(this);
         api.generateAuthorList();
 
-        points = new int[api.getNUM_AUTHORS_IN_GAME()];
-        pointsTotal = 0;
+        authorPoints = new int[api.getNUM_AUTHORS_IN_GAME()];
         bars = api.getNUM_AUTHORS_IN_GAME();
 
         // Init quote arrays
@@ -162,8 +152,6 @@ public class GUI extends PApplet {
         if (loadNewQuotes)
             loadingScreen();
 
-        if (debugMode)
-            debugDisplay();
 
         // This refers to the way we register clicks -- see where it is declared
         clickActive = false;
@@ -254,7 +242,7 @@ public class GUI extends PApplet {
 
         // If the author's point count is zero, we add a bar
 
-        points[api.getAuthorIndex(authors[choiceIndex])]++;
+        authorPoints[api.getAuthorIndex(authors[choiceIndex])]++;
 
 
         selectionButton.setButtonText(quotes[choiceIndex]);
@@ -282,8 +270,6 @@ public class GUI extends PApplet {
             loadNewQuotes = true;
         }
 
-        for (int point : points)
-            pointsTotal += point;
 
         // Drawing the graph at the x and y coordinate provided
         drawGraph(width / 2, (float) (height * .8), width / 2, (float) (height * .3));
@@ -295,11 +281,19 @@ public class GUI extends PApplet {
 
 
     private void getNewQuotes() {
-        for (int i = 0; i < quotes.length; i++) {
-            String[] data = api.getRandomQuote();
-            quotes[i] = data[0];
-            authors[i] = data[1];
-        }
+
+        String[] data = api.getRandomQuote();
+        quotes[0] = data[0];
+        authors[0] = data[1];
+
+        data = api.getRandomQuote();
+        // Making sure there are no duplicates
+        while (data[1].equals(authors[0]))
+            data = api.getRandomQuote();
+
+        quotes[1] = data[0];
+        authors[1] = data[1];
+
     }
 
     private void checkDebugExit() {
@@ -325,6 +319,7 @@ public class GUI extends PApplet {
         textFont(peachDays);
 
     }
+
 
     private void drawGraph(float graphX, float graphY, float graphWidth, float graphHeight) {
 
@@ -405,16 +400,6 @@ public class GUI extends PApplet {
         // Randomize button functionality
         if (randomizeAuthorsButton.mouseOnButton() && clickActive)
             api.generateAuthorList();
-
-    }
-
-    private void debugDisplay() {
-
-        fill(255);
-        rect(0, 0, 100, 100);
-        fill(0);
-        textSize(50);
-        text(screen, 50, 50);
 
     }
 

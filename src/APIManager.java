@@ -201,7 +201,7 @@ public class APIManager {
         return authorList;
     }
 
-    private int getAuthorIndex(String author) {
+    public int getAuthorIndex(String author) {
         for (int i = 0; i < authorList.length; i++)
             if (author.equals(authorList[i]))
                 return i;

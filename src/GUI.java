@@ -22,6 +22,7 @@ public class GUI extends PApplet {
 
     private PFont peachDays;
 
+    // Points is an int[] array. It counts the points for the authors. points[0] is the point count for api.getAuthorIndex(author)
     private int[] points;
     private int pointsTotal;
 
@@ -53,7 +54,7 @@ public class GUI extends PApplet {
 
         points = new int[api.getNUM_AUTHORS_IN_GAME()];
         pointsTotal = 0;
-        bars = 0;
+        bars = api.getNUM_AUTHORS_IN_GAME();
 
         // Init quote arrays
         quotes = new String[2];
@@ -251,12 +252,11 @@ public class GUI extends PApplet {
             choiceIndex = 1;
 
 
-        //this doesnt work and i dont know why pls fix
-        // TODO: FIND OUT WHAT KADEN WAS TRYING TO DO AND WHY HE WANTS TO DO IT AND THEN DO IT
-//        if(points[APIManager.getAuthorIndex(authors[choiceIndex])]==0){
-//            bars++;
-//        }
-//        points[APIManager.getAuthorIndex(authors[choiceIndex])]++;
+        // If the author's point count is zero, we add a bar
+        if (points[api.getAuthorIndex(authors[choiceIndex])] == 0) {
+            bars++;
+        }
+        points[api.getAuthorIndex(authors[choiceIndex])]++;
 
 
         selectionButton.setButtonText(quotes[choiceIndex]);
@@ -377,7 +377,7 @@ public class GUI extends PApplet {
                     this
             );
             randomizeAuthorsButton.setRectMode(CENTER);
-            randomizeAuthorsButton.setTextSize((int)(width*.015));
+            randomizeAuthorsButton.setTextSize((int) (width * .015));
         }
 
 

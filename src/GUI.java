@@ -253,9 +253,7 @@ public class GUI extends PApplet {
 
 
         // If the author's point count is zero, we add a bar
-        if (points[api.getAuthorIndex(authors[choiceIndex])] == 0) {
-            bars++;//l
-        }
+
         points[api.getAuthorIndex(authors[choiceIndex])]++;
 
 
@@ -284,22 +282,15 @@ public class GUI extends PApplet {
             loadNewQuotes = true;
         }
 
+        for (int point : points)
+            pointsTotal += point;
 
         // Drawing the graph at the x and y coordinate provided
         drawGraph(width / 2, (float) (height * .8), width / 2, (float) (height * .3));
 
 
-        for (int point : points)
-            pointsTotal += point;
 
 
-            /*
-            points[APIManager.getAuthorIndex(authors[choiceIndex])]--;
-            if(points[APIManager.getAuthorIndex(authors[choiceIndex])]==0){
-                bars--;
-            }
-
-            */
     }
 
 
@@ -342,13 +333,18 @@ public class GUI extends PApplet {
         rect(graphX, graphY, graphWidth, graphHeight, (float) (width * .02));
 
         //THIS DOES NOT WORK FOR NOW BUT EDO NOT TOUCH IT WILL EXPLODE
+        /*
         for (int i = 0; i < bars; i++) {
             rect(
-                    (float) (width * .2),
-                    (float) (height * .65 + (i * (float) (width * 0.05))),
-                    (float) (0.4 * (5 / pointsTotal)),
+                    (float) (graphX - graphWidth*.45),
+                    (float) ((graphY - graphHeight*.4) + i*(graphHeight / bars)),
+
+                    (float) (graphWidth*.9 / )
+                            (0.4 * (5 / pointsTotal)),
                     (float) (((height * .25)) / (i + 1)));
         }
+
+         */
 
         color(0);
         line(

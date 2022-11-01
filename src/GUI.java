@@ -275,8 +275,6 @@ public class GUI extends PApplet {
         drawGraph(width / 2, (float) (height * .8), width / 2, (float) (height * .3));
 
 
-
-
     }
 
 
@@ -408,6 +406,13 @@ public class GUI extends PApplet {
 
     public PApplet getPApplet() {
         return this;
+    }
+
+    private int getTotalPoints() {
+        int total = 0;
+        for (int num : authorPoints)
+            total += num;
+        return total;
     }
 }
 

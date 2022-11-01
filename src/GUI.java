@@ -325,21 +325,23 @@ public class GUI extends PApplet {
         rectMode(CENTER);
         rect(graphX, graphY, graphWidth, graphHeight, (float) (width * .02));
 
-        //THIS DOES NOT WORK FOR NOW BUT EDO NOT TOUCH IT WILL EXPLODE
+        for(int i=0;i<4;i++){
+            authorPoints[i]=1;
+        }
 
-        /*
+
         for (int i = 0; i < bars; i++) {
             rect(
-                    (float) (graphX - graphWidth*.45),
+                    (float) (graphX - graphWidth*.45 + ((graphWidth*.9) * ( authorPoints[i]/getTotalPoints()))/2),
                     (float) ((graphY - graphHeight*.45) + i*((graphHeight*.9) / bars)  +graphHeight*0.05),
 
-                    (float) ( (graphWidth*.9) * (individPoints/totalPoints)),
-                    (float) ( (graphHeight*.9) / (bars + bars*graphHeight*0.05)   )
+                    (float) ( (graphWidth*.9) * (authorPoints[i]/getTotalPoints())),
+                    (float) ( (graphHeight*.9) / (bars + bars*graphHeight*0.001)   )
             );
 
         }
 
-         */
+
 
 
         color(0);

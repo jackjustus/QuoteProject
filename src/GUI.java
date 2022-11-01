@@ -333,18 +333,21 @@ public class GUI extends PApplet {
         rect(graphX, graphY, graphWidth, graphHeight, (float) (width * .02));
 
         //THIS DOES NOT WORK FOR NOW BUT EDO NOT TOUCH IT WILL EXPLODE
+
         /*
         for (int i = 0; i < bars; i++) {
             rect(
                     (float) (graphX - graphWidth*.45),
-                    (float) ((graphY - graphHeight*.4) + i*(graphHeight / bars)),
+                    (float) ((graphY - graphHeight*.45) + i*((graphHeight*.9) / bars)  +graphHeight*0.05),
 
-                    (float) (graphWidth*.9 / )
-                            (0.4 * (5 / pointsTotal)),
-                    (float) (((height * .25)) / (i + 1)));
+                    (float) ( (graphWidth*.9) * (individPoints/totalPoints)),
+                    (float) ( (graphHeight*.9) / (bars + bars*graphHeight*0.05)   )
+            );
+
         }
 
          */
+
 
         color(0);
         line(

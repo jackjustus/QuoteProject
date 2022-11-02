@@ -23,6 +23,7 @@ public class APIManager {
     private int maxQuoteLength;
 
     public static int NUM_AUTHORS_IN_GAME = 4;
+    public static int NUM_ROUNDS_IN_GAME = NUM_AUTHORS_IN_GAME*2;
 
     public String[] authorPool = new String[]{
             "Simon Cowell",
@@ -48,6 +49,20 @@ public class APIManager {
         client = new OkHttpClient();
 
         maxQuoteLength = 100;
+    }
+
+    public String[] getAuthorsForRound(int round){
+
+        String returnedAuthors[]=new String[2];
+
+        returnedAuthors[0] = authorList[Math.abs(4-round)];
+        if(round==3 || round==7) {
+            returnedAuthors[1] = authorList[0];
+        }else{
+            returnedAuthors[1] = authorList[Math.abs(3-round)];
+        }
+        return returnedAuthors;
+
     }
 
     public String[] getRandomQuote() {

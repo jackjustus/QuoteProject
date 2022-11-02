@@ -30,6 +30,9 @@ public class GUI extends PApplet {
 
     private int screen;
 
+    //counts rounds of the game
+    private int round;
+
     public GUI() {
         screen = 0;
     }
@@ -49,6 +52,8 @@ public class GUI extends PApplet {
         // Init quote arrays
         quotes = new String[2];
         authors = new String[2];
+
+        round=0;
 
         // Home screen init
         beginButton = new Button(
@@ -279,6 +284,10 @@ public class GUI extends PApplet {
 
 
     private void getNewQuotes() {
+
+
+
+
 
         String[] data = api.getRandomQuote();
         quotes[0] = data[0];

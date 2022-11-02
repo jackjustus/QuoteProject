@@ -26,7 +26,7 @@ public class GUI extends PApplet {
     private int[] authorPoints;
 
     //number of bars on the results graph
-    private int bars;
+    private final int NUM_BARS = APIManager.NUM_AUTHORS_IN_GAME;
 
     private int screen;
 
@@ -43,8 +43,7 @@ public class GUI extends PApplet {
         api = new APIManager(this);
         api.generateAuthorList();
 
-        authorPoints = new int[api.getNUM_AUTHORS_IN_GAME()];
-        bars = api.getNUM_AUTHORS_IN_GAME();
+        authorPoints = new int[APIManager.NUM_AUTHORS_IN_GAME];
 
         // Init quote arrays
         quotes = new String[2];
@@ -241,7 +240,6 @@ public class GUI extends PApplet {
 
 
         // If the author's point count is zero, we add a bar
-
         authorPoints[api.getAuthorIndex(authors[choiceIndex])]++;
 
 
@@ -325,20 +323,34 @@ public class GUI extends PApplet {
         rectMode(CENTER);
         rect(graphX, graphY, graphWidth, graphHeight, (float) (width * .02));
 
-        for(int i=0;i<4;i++){
-            authorPoints[i]=1;
-        }
+//        for(int i=0;i<4;i++){
+//            authorPoints[i]=1;
+//        }
 
 
-        for (int i = 0; i < bars; i++) {
+        rectMode(CORNER);
+        for (int i = 0; i < NUM_BARS; i++) {
+//            rect(
+//                    (float) (graphX - graphWidth*.45 /*+ ((graphWidth*.9) * ( authorPoints[i]/getTotalPoints()))*//2),
+//                    (float) ((graphY - graphHeight*.45) + i*((graphHeight*.9) / bars)  +graphHeight*0.05),
+//
+//                    (float) ( (graphWidth*.9) * (authorPoints[i]/getTotalPoints())),
+//                    (float) ( (graphHeight*.9) / (bars + bars*graphHeight*0.001)   )
+//            );
+
             rect(
-                    (float) (graphX - graphWidth*.45 + ((graphWidth*.9) * ( authorPoints[i]/getTotalPoints()))/2),
-                    (float) ((graphY - graphHeight*.45) + i*((graphHeight*.9) / bars)  +graphHeight*0.05),
+                    (float) (graphX - graphWidth * .45),
+                    (float) ((graphY - graphHeight * .45) + i * ((graphHeight * .9) / NUM_BARS) + graphHeight * .05),
 
-                    (float) ( (graphWidth*.9) * (authorPoints[i]/getTotalPoints())),
-                    (float) ( (graphHeight*.9) / (bars + bars*graphHeight*0.001)   )
+                    (float) ((graphWidth * .9) * (authorPoints[i] / getTotalPoints())),
+                    (float) ((graphHeight * .9) / (NUM_BARS + NUM_BARS * graphHeight * 0.001))
             );
 
+
+//            System.out.println("x: " + (graphX - graphWidth * .45));
+//            System.out.println("y: " + ((graphY - graphHeight * .45) + i * ((graphHeight * .9) / NUM_BARS) + graphHeight * .05));
+            System.out.println("AUTHOR [" + i + "] POINT COUNT:" + authorPoints[i]);
+//            System.out.println("height: " + (graphHeight * .9) / (NUM_BARS + NUM_BARS * graphHeight * 0.001));
         }
 
 
@@ -386,10 +398,10 @@ public class GUI extends PApplet {
         // Listing the actual number of authors
         // The distance between the authors gets smaller based on the number of authors
         // This is optimized for 4 authors -- may bug out if more are added but figure I might try
-        float listYIncrement = listHeight / (api.getNUM_AUTHORS_IN_GAME() + 4);
+        float listYIncrement = listHeight / (APIManager.NUM_AUTHORS_IN_GAME + 4);
 
         textSize((int) (width * .015));
-        for (int i = 0; i < api.getNUM_AUTHORS_IN_GAME(); i++) {
+        for (int i = 0; i < APIManager.NUM_AUTHORS_IN_GAME; i++) {
             text(
                     api.getAuthorList()[i],
                     x + listWidth / 2,

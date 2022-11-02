@@ -22,7 +22,7 @@ public class APIManager {
 
     private int maxQuoteLength;
 
-    private int NUM_AUTHORS_IN_GAME = 4;
+    public static int NUM_AUTHORS_IN_GAME = 4;
 
     public String[] authorPool = new String[]{
             "Simon Cowell",
@@ -224,10 +224,6 @@ public class APIManager {
 
     private JSONObject parseResponse(Response response) throws IOException, JSONException {
         return new JSONObject(response.body().string().trim());
-    }
-
-    public int getNUM_AUTHORS_IN_GAME(){
-        return NUM_AUTHORS_IN_GAME;
     }
 
     @Deprecated

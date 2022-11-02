@@ -51,11 +51,26 @@ public class APIManager {
         maxQuoteLength = 100;
     }
 
+    public String[][] getQuotesForRound(int round){
+        String returnedQuotes[][]=new String[2][];
+
+        returnedQuotes[0]=fetchQuoteGardenAPI(getAuthorsForRound(round)[0]);
+        returnedQuotes[1]=fetchQuoteGardenAPI(getAuthorsForRound(round)[1]);
+        return returnedQuotes;
+    }
+
     public String[] getAuthorsForRound(int round){
 
         String returnedAuthors[]=new String[2];
 
-        returnedAuthors[0] = authorList[Math.abs(4-round)];
+        if(round==4){
+            returnedAuthors[0]=authorList[0];
+        }else {
+            returnedAuthors[0] = authorList[Math.abs(4 - Math.abs(4 - round))];
+        }
+
+
+        //this bit dont work
         if(round==3 || round==7) {
             returnedAuthors[1] = authorList[0];
         }else{

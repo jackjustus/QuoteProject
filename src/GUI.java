@@ -284,20 +284,11 @@ public class GUI extends PApplet {
     private void getNewQuotes() {
 
 
+        quotes[0]=api.getQuotesForRound(round)[0][round];
+        authors[0]=api.getAuthorsForRound(round)[0];
 
-
-
-        String[] data = api.getRandomQuote();
-        quotes[0] = data[0];
-        authors[0] = data[1];
-
-        data = api.getRandomQuote();
-        // Making sure there are no duplicates
-        while (data[1].equals(authors[0]))
-            data = api.getRandomQuote();
-
-        quotes[1] = data[0];
-        authors[1] = data[1];
+        quotes[1]=api.getQuotesForRound(round)[1][round];
+        authors[1]=api.getAuthorsForRound(round)[1];
 
     }
 

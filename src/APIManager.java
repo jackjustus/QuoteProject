@@ -68,11 +68,11 @@ public class APIManager {
         }
 
 
-        //this bit dont work
-        if (round == 3 || round == 7) {
+
+        if(round==3) {
             returnedAuthors[1] = authorList[0];
-        } else {
-            returnedAuthors[1] = authorList[Math.abs(3 - round)];
+        }else{
+            returnedAuthors[1] = authorList[Math.abs(NUM_AUTHORS_IN_GAME - Math.abs((NUM_AUTHORS_IN_GAME-1) - round))];
         }
         return returnedAuthors;
 

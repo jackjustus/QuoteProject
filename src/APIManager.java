@@ -66,15 +66,15 @@ public class APIManager {
         if(round==4){
             returnedAuthors[0]=authorList[0];
         }else {
-            returnedAuthors[0] = authorList[Math.abs(4 - Math.abs(4 - round))];
+            returnedAuthors[0] = authorList[Math.abs(NUM_AUTHORS_IN_GAME - Math.abs(NUM_AUTHORS_IN_GAME - round))];
         }
 
 
-        //this bit dont work
-        if(round==3 || round==7) {
+
+        if(round==3) {
             returnedAuthors[1] = authorList[0];
         }else{
-            returnedAuthors[1] = authorList[Math.abs(3-round)];
+            returnedAuthors[1] = authorList[Math.abs(NUM_AUTHORS_IN_GAME - Math.abs((NUM_AUTHORS_IN_GAME-1) - round))];
         }
         return returnedAuthors;
 

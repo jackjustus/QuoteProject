@@ -61,7 +61,7 @@ public class APIManager {
 
     public String[] getAuthorsForRound(int round){
 
-        String returnedAuthors[]=new String[2];
+        String[] returnedAuthors =new String[2];
 
         if(round==4){
             returnedAuthors[0]=authorList[0];

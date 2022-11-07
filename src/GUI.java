@@ -1,6 +1,8 @@
 import processing.core.PApplet;
 import processing.core.PFont;
 
+import java.awt.*;
+
 public class GUI extends PApplet {
 
     private final int BUTTON_TEXT_SIZE = (int) (width * .4);
@@ -52,7 +54,7 @@ public class GUI extends PApplet {
         quotes = new String[2];
         authors = new String[2];
 
-        round=0;
+        round = 0;
 
         // Home screen init
         beginButton = new Button(
@@ -220,10 +222,15 @@ public class GUI extends PApplet {
         if (choiceButton1.mouseOnButton() && clickActive) {
             screen = 2;
             isChoice1 = true;
+
+            // Incrementing that authors point count by one
+            authorPoints[api.getAuthorIndex(authors[0])]++;
         } else if (choiceButton2.mouseOnButton() && clickActive) {
             screen = 2;
             isChoice1 = false;
 
+            // Incrementing that authors point count by one
+            authorPoints[api.getAuthorIndex(authors[1])]++;
         }
 
 
@@ -245,7 +252,7 @@ public class GUI extends PApplet {
 
 
         // If the author's point count is zero, we add a bar
-        authorPoints[api.getAuthorIndex(authors[choiceIndex])]++;
+//        authorPoints[api.getAuthorIndex(authors[choiceIndex])]++;
 
 
         selectionButton.setButtonText(quotes[choiceIndex]);
@@ -282,9 +289,6 @@ public class GUI extends PApplet {
 
 
     private void getNewQuotes() {
-
-
-
 
 
         String[] data = api.getRandomQuote();
@@ -351,7 +355,7 @@ public class GUI extends PApplet {
                     (float) (graphX - graphWidth * .45),
                     (float) ((graphY - graphHeight * .45) + i * ((graphHeight * .9) / NUM_BARS) + graphHeight * .05),
 
-                    (float) ((graphWidth * .9) * (authorPoints[i] / getTotalPoints())),
+                    (float) ((graphWidth * .9) * ((float) authorPoints[i] / getTotalPoints())),
                     (float) ((graphHeight * .9) / (NUM_BARS + NUM_BARS * graphHeight * 0.001))
             );
 
@@ -359,10 +363,10 @@ public class GUI extends PApplet {
 //            System.out.println("x: " + (graphX - graphWidth * .45));
 //            System.out.println("y: " + ((graphY - graphHeight * .45) + i * ((graphHeight * .9) / NUM_BARS) + graphHeight * .05));
             System.out.println("AUTHOR [" + i + "] POINT COUNT:" + authorPoints[i]);
+//            System.out.println("TOTAL POINTS: " + NUM_BARS);
+            System.out.println("[" + i + "]   (" + (graphWidth * .9) + ") * (" + authorPoints[i] + " / " + getTotalPoints() + ")");
 //            System.out.println("height: " + (graphHeight * .9) / (NUM_BARS + NUM_BARS * graphHeight * 0.001));
         }
-
-
 
 
         color(0);

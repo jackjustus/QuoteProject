@@ -20,10 +20,9 @@ public class APIManager {
     PApplet p;
     OkHttpClient client;
 
-    private int maxQuoteLength;
-
+    private final int MAX_QUOTE_LENGTH = 150;
     public static int NUM_AUTHORS_IN_GAME = 4;
-    public static int NUM_ROUNDS_IN_GAME = NUM_AUTHORS_IN_GAME*2;
+    public static int NUM_ROUNDS_IN_GAME = NUM_AUTHORS_IN_GAME * 2;
 
     public String[] authorPool = new String[]{
             "Simon Cowell",
@@ -48,33 +47,32 @@ public class APIManager {
         // Init API resources
         client = new OkHttpClient();
 
-        maxQuoteLength = 100;
     }
 
-    public String[][] getQuotesForRound(int round){
-        String returnedQuotes[][]=new String[2][];
+    public String[][] getQuotesForRound(int round) {
+        String returnedQuotes[][] = new String[2][];
 
-        returnedQuotes[0]=fetchQuoteGardenAPI(getAuthorsForRound(round)[0]);
-        returnedQuotes[1]=fetchQuoteGardenAPI(getAuthorsForRound(round)[1]);
+        returnedQuotes[0] = fetchQuoteGardenAPI(getAuthorsForRound(round)[0]);
+        returnedQuotes[1] = fetchQuoteGardenAPI(getAuthorsForRound(round)[1]);
         return returnedQuotes;
     }
 
-    public String[] getAuthorsForRound(int round){
+    public String[] getAuthorsForRound(int round) {
 
-        String[] returnedAuthors =new String[2];
+        String[] returnedAuthors = new String[2];
 
-        if(round==4){
-            returnedAuthors[0]=authorList[0];
-        }else {
+        if (round == 4) {
+            returnedAuthors[0] = authorList[0];
+        } else {
             returnedAuthors[0] = authorList[Math.abs(4 - Math.abs(4 - round))];
         }
 
 
         //this bit dont work
-        if(round==3 || round==7) {
+        if (round == 3 || round == 7) {
             returnedAuthors[1] = authorList[0];
-        }else{
-            returnedAuthors[1] = authorList[Math.abs(3-round)];
+        } else {
+            returnedAuthors[1] = authorList[Math.abs(3 - round)];
         }
         return returnedAuthors;
 
@@ -98,7 +96,7 @@ public class APIManager {
 
                 default:
                     String[] quote = fetchQuoteGardenAPI(authorList[rand]);
-                    if (quote[0].length() <= maxQuoteLength)
+                    if (quote[0].length() <= MAX_QUOTE_LENGTH)
                         return quote;
             }
 
@@ -159,13 +157,25 @@ public class APIManager {
 
             // Getting the quote and author
             String quote = quoteData.get("quoteText") + "";
-            String quoteAuthor = quoteData.get("quoteAuthor") + "";
+//            String quoteAuthor = quoteData.get("quoteAuthor") + "";
 
-            /* REASONING BEHIND RETURNING THE API AUTHOR INSTEAD OF THE SPECIFIED ONE
-            There is a chance that despite asking the API for one author, they might give me a quote from another
-            If that happens, we need to return this author because there could be a discrepancy between the two authors, and this would be the correct one
-            Thanks for coming to my TED talk
-            */
+            // Making sure the quote is a valid length
+            while (quote.length() > MAX_QUOTE_LENGTH) {
+
+                // Attempting to communicate with the API
+                // The response is stored in response
+                response = fetchResponse(request);
+
+                // Parsing the response to just the quoteData
+                parsedResponse = parseResponse(response);
+                quoteData = (JSONObject) ((JSONArray) parsedResponse.get("data")).get(0);
+
+                // Getting the quote and author
+                quote = quoteData.get("quoteText") + "";
+//                quoteAuthor = quoteData.get("quoteAuthor") + "";
+
+            }
+
 
             // Returning the quote and author if there were no errors thrown
             String[] returnedData = new String[3];

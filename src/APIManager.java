@@ -54,7 +54,7 @@ public class APIManager {
         String returnedQuotes[] = new String[2];
 
         returnedQuotes[0] = fetchQuoteGardenAPI(getAuthorsForRound(round)[0])[0];
-        returnedQuotes[1] = fetchQuoteGardenAPI(getAuthorsForRound(round)[1])[1];
+        returnedQuotes[1] = fetchQuoteGardenAPI(getAuthorsForRound(round)[1])[0];
         return returnedQuotes;
     }
 

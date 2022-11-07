@@ -49,31 +49,35 @@ public class APIManager {
 
     }
 
-    public String[][] getQuotesForRound(int round) {
-        String returnedQuotes[][] = new String[2][];
+    public String[] getQuotesForRound(int round) {
 
-        returnedQuotes[0] = fetchQuoteGardenAPI(getAuthorsForRound(round)[0]);
-        returnedQuotes[1] = fetchQuoteGardenAPI(getAuthorsForRound(round)[1]);
+        String returnedQuotes[] = new String[2];
+
+        returnedQuotes[0] = fetchQuoteGardenAPI(getAuthorsForRound(round)[0])[0];
+        returnedQuotes[1] = fetchQuoteGardenAPI(getAuthorsForRound(round)[1])[1];
         return returnedQuotes;
     }
 
     public String[] getAuthorsForRound(int round) {
 
+        // Return two authors
+        // [0] - The first author for the round (the left button)
+        // [1] - The second author for the round (the right button)
         String[] returnedAuthors = new String[2];
 
-        if (round == 4) {
-            returnedAuthors[0] = authorList[0];
-        } else {
-            returnedAuthors[0] = authorList[Math.abs(4 - Math.abs(4 - round))];
-        }
+        // Setting the first author for the round to the round number and math things
+        returnedAuthors[0] = authorList[round % NUM_AUTHORS_IN_GAME];
 
 
-
-        if(round==3) {
+        // For some ungodly reason there is an exception to the math at the very specific number three
+        // Thus this if statement exists for this edge case born from the depths of hell
+        if (round == 3) {
             returnedAuthors[1] = authorList[0];
-        }else{
-            returnedAuthors[1] = authorList[Math.abs(NUM_AUTHORS_IN_GAME - Math.abs((NUM_AUTHORS_IN_GAME-1) - round))];
+        } else {
+            returnedAuthors[1] = authorList[Math.abs(NUM_AUTHORS_IN_GAME - Math.abs((NUM_AUTHORS_IN_GAME - 1) - round))];
         }
+
+        System.out.println(returnedAuthors[0] + " AND " + returnedAuthors[1]);
         return returnedAuthors;
 
     }

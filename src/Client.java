@@ -14,10 +14,13 @@ public class Client {
 
         APIManager api = new APIManager(gui.getPApplet());
 
+
         // The game gets quotes from a specified number of authors
         // This generates those authors from a pool of authors specified in the APIManager class
         api.generateAuthorList();
 
+//        for (int i = 0; i < APIManager.NUM_ROUNDS_IN_GAME; i++)
+//            api.getAuthorsForRound(i);
     }
 
     public static void printToConsole(String s) {

@@ -126,6 +126,7 @@ public class GUI extends PApplet {
         checkDebugExit();
 
         if (loadNewQuotes) {
+            round++;
             getNewQuotes();
             loadNewQuotes = false;
         }
@@ -159,6 +160,9 @@ public class GUI extends PApplet {
 
         // This refers to the way we register clicks -- see where it is declared
         clickActive = false;
+
+        fill(0);
+        text(round, 100, 100);
     }
 
     private void homeScreen() {
@@ -289,11 +293,12 @@ public class GUI extends PApplet {
     private void getNewQuotes() {
 
 
-        quotes[0]=api.getQuotesForRound(round)[0][round];
-        authors[0]=api.getAuthorsForRound(round)[0];
+        quotes[0] = api.getQuotesForRound(round)[0];
+        authors[0] = api.getAuthorsForRound(round)[0];
 
-        quotes[1]=api.getQuotesForRound(round)[1][round];
-        authors[1]=api.getAuthorsForRound(round)[1];
+        quotes[1] = api.getQuotesForRound(round)[1];
+        System.out.println(quotes[1]);
+        authors[1] = api.getAuthorsForRound(round)[1];
 
     }
 
@@ -328,10 +333,6 @@ public class GUI extends PApplet {
         rectMode(CENTER);
         rect(graphX, graphY, graphWidth, graphHeight, (float) (width * .02));
 
-//        for(int i=0;i<4;i++){
-//            authorPoints[i]=1;
-//        }
-
 
         rectMode(CORNER);
         for (int i = 0; i < NUM_BARS; i++) {
@@ -354,9 +355,9 @@ public class GUI extends PApplet {
 
 //            System.out.println("x: " + (graphX - graphWidth * .45));
 //            System.out.println("y: " + ((graphY - graphHeight * .45) + i * ((graphHeight * .9) / NUM_BARS) + graphHeight * .05));
-            System.out.println("AUTHOR [" + i + "] POINT COUNT:" + authorPoints[i]);
+//            System.out.println("AUTHOR [" + i + "] POINT COUNT:" + authorPoints[i]);
 //            System.out.println("TOTAL POINTS: " + NUM_BARS);
-            System.out.println("[" + i + "]   (" + (graphWidth * .9) + ") * (" + authorPoints[i] + " / " + getTotalPoints() + ")");
+//            System.out.println("[" + i + "]   (" + (graphWidth * .9) + ") * (" + authorPoints[i] + " / " + getTotalPoints() + ")");
 //            System.out.println("height: " + (graphHeight * .9) / (NUM_BARS + NUM_BARS * graphHeight * 0.001));
         }
 

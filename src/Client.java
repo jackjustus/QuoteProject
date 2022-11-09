@@ -10,8 +10,6 @@ public class Client {
         // GUI Object
         // This runs the draw() function from processing so no need to call any methods from here
         GUI gui = new GUI();
-
-
         APIManager api = new APIManager(gui.getPApplet());
 
 

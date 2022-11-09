@@ -1,9 +1,3 @@
-
-
-
-//TODO fix the authors stuff something with indicies i think
-
-
 import okhttp3.Request;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
@@ -20,7 +14,7 @@ public class APIManager {
     PApplet p;
     OkHttpClient client;
 
-    private final int MAX_QUOTE_LENGTH = 150;
+    private final int MAX_QUOTE_LENGTH = 120;
     public static int NUM_AUTHORS_IN_GAME = 4;
     public static int NUM_ROUNDS_IN_GAME = NUM_AUTHORS_IN_GAME * 2;
 

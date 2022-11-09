@@ -17,7 +17,7 @@ public class GUI extends PApplet {
 
     // String arrays for the quotes and their authors
     private String[] quotes, authors;
-    // See the mouseReleased() function
+
     private boolean clickActive, loadNewQuotes, isChoice1;
 
     private PFont peachDays;
@@ -30,7 +30,6 @@ public class GUI extends PApplet {
 
     private int screen;
 
-    //counts rounds of the game
     private int round;
 
     public GUI() {
@@ -243,7 +242,7 @@ public class GUI extends PApplet {
     }
 
     private void resultScreen() {
-        background(210);
+        background(255);
 
         int choiceIndex;
 
@@ -289,7 +288,6 @@ public class GUI extends PApplet {
 
     }
 
-
     private void getNewQuotes() {
 
 
@@ -319,6 +317,7 @@ public class GUI extends PApplet {
 
         fill(0);
         textSize(75);
+        textAlign(CENTER, CENTER);
         text("Loading...", width / 2, height / 2);
 
         textAlign(CENTER);
@@ -334,23 +333,42 @@ public class GUI extends PApplet {
         rect(graphX, graphY, graphWidth, graphHeight, (float) (width * .02));
 
 
+        // Calculating the highest point count among the authors
+        float highestPointCount = 0;
+        for (int num : authorPoints)
+            if (num > highestPointCount)
+                highestPointCount = num;
+
+
         rectMode(CORNER);
         for (int i = 0; i < NUM_BARS; i++) {
-//            rect(
-//                    (float) (graphX - graphWidth*.45 /*+ ((graphWidth*.9) * ( authorPoints[i]/getTotalPoints()))*//2),
-//                    (float) ((graphY - graphHeight*.45) + i*((graphHeight*.9) / bars)  +graphHeight*0.05),
-//
-//                    (float) ( (graphWidth*.9) * (authorPoints[i]/getTotalPoints())),
-//                    (float) ( (graphHeight*.9) / (bars + bars*graphHeight*0.001)   )
-//            );
 
+            float barX = (float) (graphX - graphWidth * .45);
+            float barY = (float) ((graphY - graphHeight * .45) + i * ((graphHeight * .9) / NUM_BARS) + graphHeight * .05);
+            float barWidth = (float) ((graphWidth * .9) * ((float) authorPoints[i] / highestPointCount));
+            float barHeight = (float) ((graphHeight * .9) / (NUM_BARS + NUM_BARS * graphHeight * 0.001));
+
+            // Drawing the actual bar of the graph
+            fill(0);
             rect(
-                    (float) (graphX - graphWidth * .45),
-                    (float) ((graphY - graphHeight * .45) + i * ((graphHeight * .9) / NUM_BARS) + graphHeight * .05),
-
-                    (float) ((graphWidth * .9) * ((float) authorPoints[i] / getTotalPoints())),
-                    (float) ((graphHeight * .9) / (NUM_BARS + NUM_BARS * graphHeight * 0.001))
+                    barX,
+                    barY,
+                    barWidth,
+                    barHeight
             );
+
+            // Drawing the author's name
+            String author = api.authorList[i];
+            fill(255);
+            textSize((float) (graphWidth * .02));
+            textAlign(LEFT, CENTER);
+            text(author, barX + graphWidth / 16 + barWidth / 8, barY + barHeight / 2);
+
+            // If this bar is the leading point count, we want to display the number of points at the end of the graph
+            if (authorPoints[i] == highestPointCount) {
+                textSize((float) (graphWidth * .04));
+                text(authorPoints[i], (float) (barX + graphWidth * .86), barY + barHeight / 2);
+            }
 
 
 //            System.out.println("x: " + (graphX - graphWidth * .45));

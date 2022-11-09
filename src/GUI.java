@@ -52,7 +52,7 @@ public class GUI extends PApplet {
         quotes = new String[2];
         authors = new String[2];
 
-        round = 0;
+        round = -1;
 
         // Home screen init
         beginButton = new Button(

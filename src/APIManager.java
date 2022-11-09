@@ -77,6 +77,7 @@ public class APIManager {
             returnedAuthors[1] = authorList[Math.abs(NUM_AUTHORS_IN_GAME - Math.abs((NUM_AUTHORS_IN_GAME - 1) - round))];
         }
 
+
         System.out.println(returnedAuthors[0] + " AND " + returnedAuthors[1]);
         return returnedAuthors;
 

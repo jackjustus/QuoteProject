@@ -15,6 +15,8 @@ public class GUI extends PApplet {
     private Button selectionButton;
     private Button returnButton;
 
+    private Button playAgainButton;
+
     // String arrays for the quotes and their authors
     private String[] quotes, authors;
     // See the mouseReleased() function
@@ -107,6 +109,21 @@ public class GUI extends PApplet {
                 "",
                 this
         );
+
+
+        playAgainButton = new Button(
+                (float) (width * .35),
+                (float) (height * .8),
+                (float) (width * .3),
+                (float) (height * .17),
+                30,
+                "PLAY AGAIN",
+                this
+        );
+        playAgainButton.setTextSize(BUTTON_TEXT_SIZE);
+
+
+
         returnButton.setShape("triangle");
 
         isChoice1 = true;
@@ -127,6 +144,9 @@ public class GUI extends PApplet {
 
         if (loadNewQuotes) {
             round++;
+            if(round==3){
+                screen=3;
+            }
             getNewQuotes();
             loadNewQuotes = false;
         }
@@ -144,6 +164,7 @@ public class GUI extends PApplet {
                 resultScreen();
                 break;
             case 3:
+                finalScreen();
                 break;
             default:
                 System.out.println("Invalid Screen Number: " + screen + ", Defaulting to 0");
@@ -199,6 +220,8 @@ public class GUI extends PApplet {
 
             // Going to the game screen after the quotes have been loaded
             screen = 1;
+
+
         }
 
     }
@@ -285,6 +308,63 @@ public class GUI extends PApplet {
 
         // Drawing the graph at the x and y coordinate provided
         drawGraph(width / 2, (float) (height * .8), width / 2, (float) (height * .3));
+
+
+    }
+
+
+    private void finalScreen(){
+
+        background(210);
+
+        textSize((float)(width*.04));
+        text("YOUR SOULMATE IS...", (float)(width*0.5), (float)(height*0.15));
+        int authorIndex=0;
+        for(int i=0;i<4;i++){
+            if(authorPoints[i]>authorIndex){
+                authorIndex=authorPoints[i];
+            }
+        }
+
+        int tieChecker=0;
+        for(int i=0;i<4;i++){
+            if(authorPoints[i]==authorIndex){
+                tieChecker++;
+            }
+        }
+
+        String soulmate;
+
+
+        if(tieChecker>1){
+            soulmate="A whole bunch of people you polyamorous fellow";
+        } else{
+            soulmate=api.authorList[authorIndex-1];
+        }
+
+        text(soulmate,(float)(width*0.5), (float)(height*0.24));
+
+
+
+        drawGraph(
+                (float)(width*0.5),
+                (float)(height*0.55),
+                (float)(width*0.6),
+                (float)(height*0.4)
+        );
+
+        playAgainButton.drawButton();
+
+        if (playAgainButton.mouseOnButton() && clickActive) {
+
+            // This will display the loading screen then load the quotes
+            loadNewQuotes = true;
+
+            // Going to the game screen after the quotes have been loaded
+            screen = 0;
+            round=-1;
+        }
+
 
 
     }

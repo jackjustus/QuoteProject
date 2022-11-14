@@ -1,6 +1,8 @@
 import processing.core.PApplet;
 import processing.core.PFont;
 
+import java.util.Arrays;
+
 public class GUI extends PApplet {
 
     private final int BUTTON_TEXT_SIZE = (int) (width * .4);
@@ -353,12 +355,13 @@ public class GUI extends PApplet {
 
         if (playAgainButton.mouseOnButton() && clickActive) {
 
-            // This will display the loading screen then load the quotes
-            loadNewQuotes = true;
 
-            // Going to the game screen after the quotes have been loaded
+             //Going to the game screen after the quotes have been loaded
             screen = 0;
             round = -1;
+
+            Arrays.fill(authorPoints, 0);
+            api.generateAuthorList();
         }
 
 

@@ -4,19 +4,15 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import processing.core.PApplet;
 
 import java.io.IOException;
 import java.util.Arrays;
 
 public class APIManager {
 
-    PApplet p;
     OkHttpClient client;
 
-    private final int MAX_QUOTE_LENGTH = 120;
-    public static int NUM_AUTHORS_IN_GAME = 4;
-    public static int NUM_ROUNDS_IN_GAME = NUM_AUTHORS_IN_GAME * 2;
+    public final static int NUM_AUTHORS_IN_GAME = 4;
 
     public String[] authorPool = new String[]{
             "Simon Cowell",
@@ -35,8 +31,7 @@ public class APIManager {
 
     public String[] authorList;
 
-    public APIManager(PApplet p) {
-        this.p = p;
+    public APIManager() {
 
         // Init API resources
         client = new OkHttpClient();
@@ -45,7 +40,7 @@ public class APIManager {
 
     public String[] getQuotesForRound(int round) {
 
-        String returnedQuotes[] = new String[2];
+        String[] returnedQuotes = new String[2];
 
         returnedQuotes[0] = fetchQuoteGardenAPI(getAuthorsForRound(round)[0])[0];
         returnedQuotes[1] = fetchQuoteGardenAPI(getAuthorsForRound(round)[1])[0];
@@ -71,67 +66,8 @@ public class APIManager {
             returnedAuthors[1] = authorList[Math.abs(NUM_AUTHORS_IN_GAME - Math.abs((NUM_AUTHORS_IN_GAME - 1) - round))];
         }
 
-
-        System.out.println(returnedAuthors[0] + " AND " + returnedAuthors[1]);
         return returnedAuthors;
 
-    }
-
-    public String[] getRandomQuote() {
-        String[] data = new String[2];
-
-        // Getting a random number for the max number of authors
-        int rand = (int) (Math.random() * authorList.length);
-
-        // This loops infinitely until the quote returned is within the maxQuoteLength and the quote is returned
-        while (true)
-            switch (authorList[rand]) {
-
-
-                // Kanye has his own API bc there are more quotes in his own API than in the Quote Garden API
-                // Kanye is no longer in the list of authors however the functionality is still here bc it took a good amount of time to make his separate API
-                case "Kanye West":
-                    return fetchKanyeAPI();
-
-                default:
-                    String[] quote = fetchQuoteGardenAPI(authorList[rand]);
-                    if (quote[0].length() <= MAX_QUOTE_LENGTH)
-                        return quote;
-            }
-
-    }
-
-    public String[] fetchKanyeAPI() {
-
-        // Building the request to be sent to the API
-        Request request = requestBuilder("https://api.kanye.rest/");
-
-
-        try {
-            // Attempting to communicate with the API
-            // The response is stored in response
-            Response response = fetchResponse(request);
-
-            // Parsing the response to just the quote
-            JSONObject jsonObject = parseResponse(response);
-            String quote = jsonObject.get("quote") + "";
-
-            // Returning the quote and author if there were no errors thrown
-            return new String[]{quote, "Kanye West"};
-
-
-        } catch (IOException | JSONException e) {
-
-            // If an error was thrown, the error should print in the console and identify itself
-            e.printStackTrace();
-            System.out.println("KANYE API FETCH FAILED");
-
-            // It should then stop the program
-            System.exit(1);
-
-            // This line will never run - only needed to compile
-            return null;
-        }
     }
 
     public String[] fetchQuoteGardenAPI(String author) {
@@ -159,6 +95,7 @@ public class APIManager {
 //            String quoteAuthor = quoteData.get("quoteAuthor") + "";
 
             // Making sure the quote is a valid length
+            int MAX_QUOTE_LENGTH = 120;
             while (quote.length() > MAX_QUOTE_LENGTH) {
 
                 // Attempting to communicate with the API
@@ -208,7 +145,7 @@ public class APIManager {
 
     public void generateAuthorList() {
 
-        // authorPool holds all of the potential authors - authorList holds the authors that will be in the game
+        // authorPool holds all the potential authors - authorList holds the authors that will be in the game
         authorList = new String[NUM_AUTHORS_IN_GAME];
         Arrays.fill(authorList, "");
 
@@ -250,11 +187,10 @@ public class APIManager {
     }
 
     private Request requestBuilder(String url) {
-        Request request = new Request.Builder()
+        return new Request.Builder()
                 .url(url)
                 .get()
                 .build();
-        return request;
     }
 
     private Response fetchResponse(Request request) throws IOException {
@@ -266,34 +202,37 @@ public class APIManager {
     }
 
     @Deprecated
-    public String fetchForismaticAPI() {
+    public String[] fetchKanyeAPI() {
 
-        Request request = new Request.Builder()
-                .url("http://api.forismatic.com/api/1.0/method=getQuote&format=xml&lang=en")
-                .get()
-//                .addHeader("authorization", "Bearer" + " " + accessToken)
-//                .addHeader("cache-control", "no-cache")
-//                .addHeader("postman-token", "b5fc33ce-3dad-86d7-6e2e-d67e14e8071b")
-                .build();
+        // Building the request to be sent to the API
+        Request request = requestBuilder("https://api.kanye.rest/");
+
 
         try {
-            Response response = client.newCall(request).execute();
+            // Attempting to communicate with the API
+            // The response is stored in response
+            Response response = fetchResponse(request);
 
-            JSONObject jsonObject = new JSONObject(response.body().string().trim());       // parser
-            JSONArray myResponse = (JSONArray) jsonObject.get("businesses");
-            String quote = (myResponse.getJSONObject(0).getString("phone"));
+            // Parsing the response to just the quote
+            JSONObject jsonObject = parseResponse(response);
+            String quote = jsonObject.get("quote") + "";
 
-            return quote;
+            // Returning the quote and author if there were no errors thrown
+            return new String[]{quote, "Kanye West"};
+
+
         } catch (IOException | JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("FORISMATIC API FETCH FAILED");
 
-            // If the API Fails, the program should stop so we can troubleshoot the issue
+            // If an error was thrown, the error should print in the console and identify itself
+            e.printStackTrace();
+            System.out.println("KANYE API FETCH FAILED");
+
+            // It should then stop the program
             System.exit(1);
 
-            // This line will never run
+            // This line will never run - only needed to compile
             return null;
         }
     }
+
 }

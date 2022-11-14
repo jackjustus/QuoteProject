@@ -2,30 +2,21 @@ import processing.core.PApplet;
 
 public class Client {
 
-    static boolean startNewGame;
+
     public static void main(String[] args) {
 
         // Setting up processing
         PApplet.main("GUI");
 
-        newGame();
-
-
-    }
-
-    public static void newGame() {
         // GUI Object
-        // This runs the draw() function from processing so no need to call any methods from here
-        GUI gui = new GUI();
-        APIManager api = new APIManager(gui.getPApplet());
+        // This runs the draw() function from processing
+        // Everything that is drawn on the screen comes from this class
+        // Some would call it the 'front' end
+        new GUI();
 
+        // The APIManager class is the 'back' end and provided quote and author data to the GUI
+        // The game gets quotes from a specified number of authors (constant in APIManager)
+        // The GUI object has its own APIManager object
 
-        // The game gets quotes from a specified number of authors
-        // This generates those authors from a pool of authors specified in the APIManager class
-        api.generateAuthorList();
-    }
-
-    public static void printToConsole(String s) {
-        System.out.println(s);
     }
 }

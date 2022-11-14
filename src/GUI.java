@@ -28,9 +28,6 @@ public class GUI extends PApplet {
     // Points is an int[] array. It counts the points for the authors. points[0] is the point count for api.getAuthorIndex(author)
     private int[] authorPoints;
 
-    //number of bars on the results graph
-    private final int NUM_BARS = APIManager.NUM_AUTHORS_IN_GAME;
-
     private int screen;
 
     private int round;
@@ -45,7 +42,7 @@ public class GUI extends PApplet {
 //        surface.setResizable(true);
 
         // API Manager Init
-        api = new APIManager(this);
+        api = new APIManager();
         api.generateAuthorList();
 
         authorPoints = new int[APIManager.NUM_AUTHORS_IN_GAME];
@@ -102,9 +99,9 @@ public class GUI extends PApplet {
 
         returnButton = new Button(
                 (float) (width * .8),
-                (float) (height * .4),
-                (float) (width * .2),
                 (float) (height * .2),
+                (float) (width * .2),
+                (float) (height * .6),
                 0,
                 "",
                 this
@@ -131,8 +128,6 @@ public class GUI extends PApplet {
 
         // Init fonts
         peachDays = createFont("PeachDays.ttf", 50);
-
-        System.out.println(width + ", " + height);
     }
 
     @Override
@@ -143,7 +138,7 @@ public class GUI extends PApplet {
 
         if (loadNewQuotes) {
             round++;
-            if (round == 3) {
+            if (round == 8) {
                 screen = 3;
             }
             getNewQuotes();
@@ -152,26 +147,17 @@ public class GUI extends PApplet {
 
 
         switch (screen) {
-
-            case 0:
-                homeScreen();
-                break;
-            case 1:
-                gameScreen();
-                break;
-            case 2:
-                resultScreen();
-                break;
-            case 3:
-                finalScreen();
-                break;
-            default:
+            case 0 -> homeScreen();
+            case 1 -> gameScreen();
+            case 2 -> resultScreen();
+            case 3 -> finalScreen();
+            default -> {
                 System.out.println("Invalid Screen Number: " + screen + ", Defaulting to 0");
                 screen = 0;
-                break;
+            }
         }
 
-        // This will be set true by one of the the screen methods
+        // This will be set true by one of the screen methods
         // The loading screen will be displayed
         // At the top of draw(), we will actually load the quotes, after the loading screen is displayed
         if (loadNewQuotes)
@@ -191,7 +177,7 @@ public class GUI extends PApplet {
         background(29, 194, 139);
 
         // Author list
-        drawAuthorList((float) (width * .05), (float) (height * .6), 1);
+        drawAuthorList((float) (width * .05), (float) (height * .6));
 
 
         // Title text settings
@@ -356,7 +342,7 @@ public class GUI extends PApplet {
         if (playAgainButton.mouseOnButton() && clickActive) {
 
 
-             //Going to the game screen after the quotes have been loaded
+            //Going to the game screen after the quotes have been loaded
             screen = 0;
             round = -1;
 
@@ -375,7 +361,6 @@ public class GUI extends PApplet {
         authors[0] = api.getAuthorsForRound(round)[0];
 
         quotes[1] = api.getQuotesForRound(round)[1];
-        System.out.println(quotes[1]);
         authors[1] = api.getAuthorsForRound(round)[1];
 
     }
@@ -410,6 +395,8 @@ public class GUI extends PApplet {
 
         // Drawing the graph's box
         rectMode(CENTER);
+        fill(85, 153, 217);
+        stroke(0);
         rect(graphX, graphY, graphWidth, graphHeight, (float) (width * .02));
 
 
@@ -421,6 +408,8 @@ public class GUI extends PApplet {
 
 
         rectMode(CORNER);
+        //number of bars on the results graph
+        int NUM_BARS = APIManager.NUM_AUTHORS_IN_GAME;
         for (int i = 0; i < NUM_BARS; i++) {
 
             float barX = (float) (graphX - graphWidth * .45);
@@ -430,6 +419,7 @@ public class GUI extends PApplet {
 
             // Drawing the actual bar of the graph
             fill(0);
+            stroke(255);
             rect(
                     barX,
                     barY,
@@ -442,21 +432,7 @@ public class GUI extends PApplet {
             fill(255);
             textSize((float) (graphWidth * .02));
             textAlign(LEFT, CENTER);
-            text(author, barX + graphWidth / 16 + barWidth / 8, barY + barHeight / 2);
-
-            // If this bar is the leading point count, we want to display the number of points at the end of the graph
-            if (authorPoints[i] == highestPointCount) {
-                textSize((float) (graphWidth * .04));
-                text(authorPoints[i], (float) (barX + graphWidth * .86), barY + barHeight / 2);
-            }
-
-
-//            System.out.println("x: " + (graphX - graphWidth * .45));
-//            System.out.println("y: " + ((graphY - graphHeight * .45) + i * ((graphHeight * .9) / NUM_BARS) + graphHeight * .05));
-//            System.out.println("AUTHOR [" + i + "] POINT COUNT:" + authorPoints[i]);
-//            System.out.println("TOTAL POINTS: " + NUM_BARS);
-//            System.out.println("[" + i + "]   (" + (graphWidth * .9) + ") * (" + authorPoints[i] + " / " + getTotalPoints() + ")");
-//            System.out.println("height: " + (graphHeight * .9) / (NUM_BARS + NUM_BARS * graphHeight * 0.001));
+            text(author + ": " + authorPoints[i], barX + graphWidth / 16 + barWidth / 8, barY + barHeight / 2);
         }
 
 
@@ -469,10 +445,10 @@ public class GUI extends PApplet {
 
     }
 
-    private void drawAuthorList(float x, float y, float scale) {
+    private void drawAuthorList(float x, float y) {
 
-        float listWidth = (float) (width * .2 * scale);
-        float listHeight = (float) (width * .2 * scale);
+        float listWidth = (float) (width * .2);
+        float listHeight = (float) (width * .2);
 
 
         // init randomizeButton
@@ -521,26 +497,18 @@ public class GUI extends PApplet {
             api.generateAuthorList();
 
     }
-
-    public PApplet getPApplet() {
-        return this;
-    }
-
-    private int getTotalPoints() {
-        int total = 0;
-        for (int num : authorPoints)
-            total += num;
-        return total;
-    }
 }
 
 
 class Button {
 
-    private float x, y, width, height, cornerRadius;
-    private boolean scaleTextSize;
+    private final float x;
+    private final float y;
+    private final float width;
+    private final float height;
+    private final float cornerRadius;
     private String text;
-    private PApplet p;
+    private final PApplet p;
     private String shape;
     private int rectMode, textSize;
 
@@ -555,7 +523,6 @@ class Button {
         this.text = text;
         this.p = p;
         textSize = 36;
-        scaleTextSize = false;
         shape = "rectangle";
         rectMode = p.CORNER;
 
@@ -592,10 +559,6 @@ class Button {
         this.text = text;
     }
 
-    public void scaleTextSize(boolean scaleTextSize) {
-        this.scaleTextSize = scaleTextSize;
-    }
-
     public void setTextSize(int textSize) {
         this.textSize = textSize;
     }
@@ -605,7 +568,7 @@ class Button {
         switch (shape) {
             case "rectangle" -> {
 
-
+                // Styling
                 p.rectMode(rectMode);
                 p.fill(85, 153, 217);
                 p.stroke(255);
@@ -616,16 +579,13 @@ class Button {
                 // Putting the text in the center of the button
                 p.fill(90, 0, 0);
                 p.textAlign(p.CENTER, p.CENTER);
-                if (scaleTextSize) {
-                    p.textSize(50);
-                } else
-                    p.textSize(textSize);
+                p.textSize(textSize);
 
-
-                float textX = x;
-                float textY = y;
-                float textWidth = width;
-                float textHeight = height;
+                float textBuffer = (float) (width * .01);
+                float textX = x + textBuffer;
+                float textY = y + textBuffer;
+                float textWidth = width - textBuffer;
+                float textHeight = height - textBuffer;
 
                 // Inking
                 p.fill(0);
@@ -635,8 +595,31 @@ class Button {
                 p.fill(230);
                 p.text(text, textX, textY, textWidth, textHeight);
             }
-            case "triangle" ->
-                    p.triangle((float) (width * 4.5), (float) (height), (float) (width * 4.5), (float) (height * 4), (float) (width * 4.8), (float) (height * 2.5));
+            case "triangle" -> {
+
+                // The triangle has caused us so much unnecessary trouble, so I just decided to throw this together
+                // The triangle draws in the incorrect spot for some reason
+                // So I just push a matrix and scale it up until it's in the correct spot (to an extent)
+
+                p.pushMatrix();
+
+                p.fill(85, 153, 217);
+                p.stroke(0);
+                p.strokeWeight((int) (width * .01));
+
+                // This draws the actual triangle by putting three vertices in the wrong spot for some reason
+                // Then it connects them and fills it in
+                p.beginShape();
+                p.vertex((float) (p.width * .8),
+                        (float) (p.height * .2));
+                p.vertex((float) (p.width * .9),
+                        (float) (p.height * .5));
+                p.vertex((float) (p.width * .8),
+                        (float) (p.height * .8));
+                p.endShape(p.CLOSE);
+
+                p.popMatrix();
+            }
         }
     }
 

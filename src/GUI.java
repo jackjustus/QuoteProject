@@ -21,13 +21,16 @@ public class GUI extends PApplet {
     // String arrays for the quotes and their authors
     private String[] quotes, authors;
 
+    // State boolean variables
     private boolean clickActive, loadNewQuotes;
 
+    // Font used for the project
     private PFont peachDays;
 
     // Points is an int[] array. It counts the points for the authors. points[0] is the point count for api.getAuthorIndex(author)
     private int[] authorPoints;
 
+    // int vars
     private int screen, round, choiceSelected;
 
     public GUI() {
@@ -298,6 +301,7 @@ public class GUI extends PApplet {
 
     @Override
     public void settings() {
+        // This is the first thing that runs, and makes the program full screen
         fullScreen();
     }
 
@@ -502,14 +506,9 @@ public class GUI extends PApplet {
 
 class Button {
 
-    private final float x;
-    private final float y;
-    private final float width;
-    private final float height;
-    private final float cornerRadius;
-    private String text;
+    private final float x, y, width, height, cornerRadius;
+    private String text, shape;
     private final PApplet p;
-    private String shape;
     private int rectMode, textSize;
 
     public Button(float x, float y, float width, float height, float cornerRadius, String text, PApplet p) {
@@ -584,6 +583,7 @@ class Button {
                 p.textAlign(p.CENTER, p.CENTER);
                 p.textSize(textSize);
 
+                // Vars to change the things
                 float textBuffer = (float) (width * .01);
                 float textX = x + textBuffer;
                 float textY = y + textBuffer;
@@ -601,9 +601,6 @@ class Button {
             case "triangle" -> {
 
                 // The triangle has caused us so much unnecessary trouble, so I just decided to throw this together
-                // The triangle draws in the incorrect spot for some reason
-                // So I just push a matrix and scale it up until it's in the correct spot (to an extent)
-
                 p.pushMatrix();
 
                 p.fill(85, 153, 217);

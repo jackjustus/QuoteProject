@@ -14,6 +14,7 @@ public class APIManager {
 
     public final static int NUM_AUTHORS_IN_GAME = 4;
 
+    // Feel free to add more authors if you want to
     public String[] authorPool = new String[]{
             "Simon Cowell",
             "Marilyn Monroe",
@@ -60,11 +61,13 @@ public class APIManager {
 
         // For some ungodly reason there is an exception to the math at the very specific number three
         // Thus this if statement exists for this edge case born from the depths of hell
-        if (round == 3) {
+        // Were not sure why round 3 doesn't work but this seems to fix it
+        if (round == 3)
             returnedAuthors[1] = authorList[0];
-        } else {
+        else
+            // The index is precisely calculated using this complex formula drafted by Kaden Chen
             returnedAuthors[1] = authorList[Math.abs(NUM_AUTHORS_IN_GAME - Math.abs((NUM_AUTHORS_IN_GAME - 1) - round))];
-        }
+
 
         return returnedAuthors;
 
@@ -179,6 +182,7 @@ public class APIManager {
     }
 
     public int getAuthorIndex(String author) {
+        // Returns the index of the author specified
         for (int i = 0; i < authorList.length; i++)
             if (author.equals(authorList[i]))
                 return i;

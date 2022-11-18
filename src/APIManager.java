@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class APIManager {
@@ -13,6 +14,8 @@ public class APIManager {
     OkHttpClient client;
 
     public final static int NUM_AUTHORS_IN_GAME = 4;
+
+    public ArrayList<String> quotesGotten;
 
     // Feel free to add more authors if you want to
     public String[] authorPool = new String[]{
@@ -36,6 +39,9 @@ public class APIManager {
 
         // Init API resources
         client = new OkHttpClient();
+
+        // Init arraylist
+        quotesGotten = new ArrayList<>();
 
     }
 
@@ -122,7 +128,18 @@ public class APIManager {
             returnedData[1] = author;
             returnedData[2] = getAuthorIndex(author) + "";
 
-            /* returnedData
+
+            // The following code can be enabled to make sure duplicate quotes are not shown -- however
+            // This leads to excessively long loading times, so I have disabled it by default
+            // Uncomment at your own risk
+            // Making sure the quote doesn't get picked again
+//            for (int i = 0; i < quotesGotten.size(); i++)
+//                if (returnedData[0].equals(quotesGotten.get(i)))
+//                    // If we have already gotten an identical quote, then we try again
+//                    returnedData = fetchQuoteGardenAPI(author);
+//            quotesGotten.add(returnedData[0]);
+
+                    /* returnedData
             [0] - The Quote
             [1] - The Author
             [2] - The author's index in the list of authors (String format for simplicity)

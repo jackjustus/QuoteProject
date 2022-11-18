@@ -65,6 +65,7 @@ public class GUI extends PApplet {
 
         // Creating the font used in the game
         peachDays = createFont("PeachDays.ttf", 50);
+
     }
 
     @Override
@@ -207,7 +208,7 @@ public class GUI extends PApplet {
         // The quote is displayed by using a dummy button
         selectionButton.setButtonText(quotes[choiceSelected - 1]);
 
-        // This draws the smaller green rectangle below the quote that was choosen
+        // This draws the smaller green rectangle below the quote that was chosen
         float[] buttonDimensions = selectionButton.getDimensions();
         fill(49, 214, 159);
         rectMode(CORNER);
@@ -218,7 +219,7 @@ public class GUI extends PApplet {
                 buttonDimensions[3],
                 30
         );
-        // Due to layering the quote button, its drawn after the author rectangle
+        // Due to layering the quote button, it's drawn after the author rectangle
         selectionButton.drawButton();
         float endYButton = (buttonDimensions[1] + buttonDimensions[3]);
         fill(20);
